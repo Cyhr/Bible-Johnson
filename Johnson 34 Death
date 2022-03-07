@@ -1698,56 +1698,109 @@ local theGui = function()
             end)
             end
         
-            spawn(function()
-            while wait() do
+            local Rotate = function()
                 pcall(function()
-                if localPlayer:DistanceFromCharacter(getClosestPlayer().Character.HumanoidRootPart.Position) <= 6 and getClosestPlayer().Name ~= localPlayer.Name and StabbingAssistance == true then
-                    spawn(function()
-                    pcall(function()
-                        if game:GetService("Workspace")[game:GetService("Players").LocalPlayer.Name].Knife.Parent.Parent == game:GetService("Workspace") then
-                        if StabbingAssistance == true then
-                            local hv = math.floor(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position.Y - getClosestPlayer().Character.HumanoidRootPart.Position.Y)
-                            if hv <= 3 and hv >= -1 then --max 3 jump if its more than -3 and -11
-                                Stab()
-                            elseif hv <= 3 and hv <= -1 then
-                                game.Players.LocalPlayer.Character.Humanoid.Jump = true
-                                wait(.55)
-                                Stab()
-                            end
-                        end
-                        end
-                    end)
-                    end)
-                    spawn(function()
-                    pcall(function()
-                        if CheckKnife() == true then
-                        for i= 1,1 do 
-                            for i,v in pairs(Player.Backpack:GetChildren()) do
-                            if v:IsA("Tool") and v.Name == "Knife" then
-                                Player.Character.Humanoid:EquipTool(v)
-                            end
-                            end
-                        end
-                        wait()
-                        if StabbingAssistance == true then
-                            local hv = math.floor(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position.Y - getClosestPlayer().Character.HumanoidRootPart.Position.Y)
-                            if hv <= 3 and hv >= -1 then --max 3 jump if its more than -3 and -11
-                                Stab()
-                            elseif hv <= 3 and hv <= -1 then
-                                game.Players.LocalPlayer.Character.Humanoid.Jump = true
-                                wait(.55)
-                                Stab()
-                            end
-                        end
-                        end
-                    end)
-                    end)
-                    wait(.50)
-                end
+                    game:GetService("Workspace")[game:GetService("Players").LocalPlayer.Name]:SetPrimaryPartCFrame(CFrame.lookAt(game:GetService("Workspace")[game:GetService("Players").LocalPlayer.Name].HumanoidRootPart.Position,game:GetService("Workspace")[getClosestPlayer().Name].HumanoidRootPart.Position * Vector3.new(1,0,1) + game:GetService("Workspace")[game:GetService("Players").LocalPlayer.Name].HumanoidRootPart.Position * Vector3.new(0,1,0)))
                 end)
-            end	
+            end
+
+            local old = getClosestPlayer().Name
+
+            spawn(function()
+                while wait(.80) do
+                    old = getClosestPlayer().Name
+                end
             end)
-        end)
+
+            local CheckForField = function()
+                if getClosestPlayer().Character:FindFirstChild("ForceField") then
+                    return true
+                else
+                    return false
+                end
+            end
+
+            spawn(function()
+                while wait() do
+                    pcall(function()
+                        if localPlayer:DistanceFromCharacter(getClosestPlayer().Character.HumanoidRootPart.Position) <= 6 and getClosestPlayer().Name ~= localPlayer.Name and StabbingAssistance == true and CheckForField() == false then
+                            spawn(function()
+                            pcall(function()
+                                if game:GetService("Workspace")[game:GetService("Players").LocalPlayer.Name].Knife.Parent.Parent == game:GetService("Workspace") then
+                                if StabbingAssistance == true and CheckForField() == false then
+                                    local hv = math.floor(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position.Y - getClosestPlayer().Character.HumanoidRootPart.Position.Y)
+                                    if hv <= 3 and hv >= -1 then --max 3 jump if its more than -3 and -11
+                                        Rotate()
+                                        wait(.05)
+                                        if localPlayer:DistanceFromCharacter(getClosestPlayer().Character.HumanoidRootPart.Position) <= 5 and getClosestPlayer().Name ~= localPlayer.Name and StabbingAssistance == true and CheckForField() == false then
+                                            if getClosestPlayer().Name == old then
+                                                Stab()
+                                            else
+                                                wait(.90)
+                                            end
+                                        end
+                                    elseif hv <= 3 and hv <= -1 then
+                                        game.Players.LocalPlayer.Character.Humanoid.Jump = true
+                                        wait(.55)
+                                        Rotate()
+                                        wait(.05)
+                                        if localPlayer:DistanceFromCharacter(getClosestPlayer().Character.HumanoidRootPart.Position) <= 5 and getClosestPlayer().Name ~= localPlayer.Name and StabbingAssistance == true and CheckForField() == false then
+                                            if getClosestPlayer().Name == old then
+                                                Stab()
+                                            else
+                                                wait(.90)
+                                            end
+                                        end
+                                    end
+                                end
+                                end
+                            end)
+                            end)
+                            spawn(function()
+                                pcall(function()
+                                    if CheckKnife() == true then
+                                        for i= 1,1 do 
+                                            for i,v in pairs(Player.Backpack:GetChildren()) do
+                                            if v:IsA("Tool") and v.Name == "Knife" then
+                                                Player.Character.Humanoid:EquipTool(v)
+                                            end
+                                            end
+                                        end
+                                        wait()
+                                        if StabbingAssistance == true and CheckForField() == false then
+                                            local hv = math.floor(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position.Y - getClosestPlayer().Character.HumanoidRootPart.Position.Y)
+                                            if hv <= 3 and hv >= -1 then --max 3 jump if its more than -3 and -11
+                                                Rotate()
+                                                wait(.05)
+                                                if localPlayer:DistanceFromCharacter(getClosestPlayer().Character.HumanoidRootPart.Position) <= 5 and getClosestPlayer().Name ~= localPlayer.Name and StabbingAssistance == true and CheckForField() == false then
+                                                    if getClosestPlayer().Name == old then
+                                                        Stab()
+                                                    else
+                                                        wait(.90)
+                                                    end
+                                                end
+                                            elseif hv <= 3 and hv <= -1 then
+                                                game.Players.LocalPlayer.Character.Humanoid.Jump = true
+                                                wait(.55)
+                                                Rotate()
+                                                wait(.05)
+                                                if localPlayer:DistanceFromCharacter(getClosestPlayer().Character.HumanoidRootPart.Position) <= 5 and getClosestPlayer().Name ~= localPlayer.Name and StabbingAssistance == true and CheckForField() == false then
+                                                    if getClosestPlayer().Name == old then
+                                                        Stab()
+                                                    else
+                                                        wait(.90)
+                                                    end
+                                                end
+                                            end
+                                        end
+                                    end
+                                end)
+                            end)
+                        end
+                    end)
+                wait(.55)
+                end
+            end)
         local b = window:CreateFolder("Gui Settings")
         b:GuiSettings()
         
