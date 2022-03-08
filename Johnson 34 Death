@@ -15,7 +15,7 @@ local theGui = function()
         until game:GetService("Players").LocalPlayer.Character.Head
         local mainPart = "HumanoidRootPart"
         local library = loadstring(game:HttpGet(("https://raw.githubusercontent.com/Jonatanortiz2/Johnny-Test/master/UiLib.lua")))()
-        local window = library:CreateWindow("Ai Assist [Beta v1]")
+        local window = library:CreateWindow("Ai [BETA v1.0.0.3]")
         local aimbot = window:CreateFolder("Assistance Settings")
         local hbee = window:CreateFolder("HBE Settings")
         local ssilent = window:CreateFolder("Discret Silent-Aim Settings")
