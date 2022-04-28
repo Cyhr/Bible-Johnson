@@ -3012,7 +3012,7 @@ function ttheGui()
 		return Services.Workspace.CurrentCamera:WorldToViewportPoint(Position)
 	end
 
-	if game.PlaceId == 379614936 or game.PlaceId == 5006801542 then -- Assassin
+	if game.PlaceId == 379614936 or game.PlaceId == 5006801542 or game.CreatorId == 113657341 then -- Assassin
 		function UpdateTargets()
 			local TargetText =Services.Players.LocalPlayer:FindFirstChild("TargetText",true)
 			if TargetText then
