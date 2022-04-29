@@ -2801,1119 +2801,1133 @@ end
 
 function ttheGui()
 	local Services = setmetatable({},{
-		__index = function(Self,Index)
-			return game:GetService(Index)
-		end
-	})
-	Classes = {}
-	for i,v in next,Services.Workspace:GetDescendants() do
-		if (string.find(string.lower(v.ClassName),("part")) or string.find(string.lower(v.ClassName),("union"))) and v.ClassName and v then
-			if not table.find(Classes,v.ClassName) then
-				table.insert(Classes,v.ClassName)
-			end
-		end
-	end
-	local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Jonatanortiz2/Johnny-Test/master/UiLib.lua"))();
-	local window = library:CreateWindow("Drax-Ware alph 1");
-	local Teamm = window:CreateFolder("Esp&Lock Team Check")
-	local aimbot = window:CreateFolder("Assistance Settings");
-	local hbee = window:CreateFolder("HBE Settings");
-	local fpsboost = window:CreateFolder("Frames Per Second Upgrader");
-	local espsettings = window:CreateFolder("Extra-Sensory-Perception (ESP)");
-	local Players = Services.Players
-	local First_Editor = "Jonatan";
-	local Second_Editor = "Sneaky";
-	local Third_Editor = "Xptz";
-	local LineEsp = false;
-	local BoxEsp = false;
-	local TextEsp = false;
-	local Esptextfont = 0;
-	local EspDistance = 1200;
-	local Esptextsize = 18;
-	local Esptextoutline = false;
-	local TargetColor = Color3.fromRGB(220,53,53);
-	local SheriffColor = Color3.fromRGB(3,173,252);
-	local CircLeCol = Color3.fromRGB(220, 53, 53);
-	local outlineEspcolor = Color3.fromRGB(0,0,0)
-	local EspColor = Color3.fromRGB(255, 255, 255)
-	local Recording = false;
-	local Esplockvis = false;
-	local showfovaimbot = false;
-	local Target;
-	local Sheriff;
-	local TeamCheck = false;
-	local checkkFar = false;
-	--[[local maxDistanceeee = 1200;]]
-	local aimbotypos = 0;
-	local aimbotxpos = 0;
-	local lp = Services.Players.LocalPlayer
-	local UserInputService = Services.UserInputService
-	local MAXDISTANCE = 250;
-	local ButtonOn = false;
-	local aimbotkey = "Right Mouse";
-	local hitp = "Head";
-	local Value = Instance.new("BoolValue")
-	local KnifeAim = false;
-	local mouse = Services.Players.LocalPlayer:GetMouse()
-
-	function UpdateValue()
-		Value.Value = not Value.Value
-	end
-
-	Services.RunService.RenderStepped:Connect(UpdateValue)
-	Services.RunService.Stepped:Connect(UpdateValue)
-	Services.RunService.Heartbeat:Connect(UpdateValue)
-
-	function FastWait()
-		Value.Changed:Wait()
-	end
-
-	aimbot:Label("Made by: Jonatan & iiSneakyNinja", Color3.fromRGB(38, 38, 38), Color3.fromRGB(0, 216, 111))
-
-	local Banned_Names = {
-		Raggy = "Murder Mystery 2",
-		Santa = "Murder Mystery 2",
-		Parts = "Murder Mystery 2",
-		EffectLoader = "Murder Mystery 2",
-		["OOF!"] = "Knife Simulator",
-		CollisionParts = "KAT!",
-		CharStage = "Phantom Forces",
-		DeadBody = "Phantom Forces",
-		ignore = "Phantom Forces",
-		Dead = "Phantom Forces",
-		PlayerModel = "Phantom Forces",
-		RefPlayer = "Phantom Forces",
-		["BROKER (ZOMBIE)"] = "Phantom Forces",
-		Bear = "The Wild West",
-		Horse = "The Wild West",
-		Deer = "The Wild West", 
-		Gator = "The Wild West",
-		Joe = "The Wild West",
-		Bison = "The Wild West",
-		General = "The Wild West",
-		HitmanHire = "The Wild West",
-		Hunter = "The Wild West",
-		FortHenryNPC = "The Wild West",
-		OutlawGeneral = "The Wild West",
-		OutlawJoe2 = "The Wild West",
-		OutlawGunStore = "The Wild West",
-		OutlawJoe1 = "The Wild West",
-		Statue = "The Wild West",
-		GunStoreNPC = "The Wild West",
-		FortSpencerNPC = "The Wild West",
-		DonationMayor = "The Wild West",
-		Joe2 = "The Wild West",
-		GeneralPuertoDorado = "The Wild West",
-		GunStoreNPCDuertoDorado = "The Wild West",
-		Cow = "The Wild West",
-		TempAuctionHouseDude = "The Wild West",
-		NPCTemplate = "The Wild West",
-		Delores = "The Wild West",
-		GunStoreNPCPuertoDorado = "The Wild West",
-		Barricade = "D-DAY",
-		Dummy = "D-DAY",
-		PassengerSick = "Jailbreak",
-		Player = "Jailbreak",
-		PlayerDriver = "Jailbreak",
-		PlayerPassenger = "Jailbreak",
-		PoliceMan = "Jailbreak",
-		NPC = "Mad City",
-		Dog = "Mad City",
-		TitainDummy = "Mad City",
-		["SWAT Suit"] = 'Jailbreak',
-		Collector = "Jailbreak",
-		ANTI = "Phantom Forces",
-		["Special Parts"] = "Da Hood",
-		SpecialParts = "Da Hood",
-		["Can i get the Red bottle"] = "Da Hood",
-		["Can i get the Green bottle"] = "Da Hood",
-		["Can i get the Blue bottle"] = "Da Hood",
-		["Help the patient for money"] = "Da Hood",
-		["Clean the shoes on the floor and come to me for cash"] = "Da Hood",
-		["Join/Leave"] = "Da Hood",
-		Staff = "Zombie Rush",
-		FracturedBogo = "Zombie Rush",
-		FracturedBWBogo = "Zombie Rush",
-		CherryBlossom = "Zombie Rush",
-		Beacon = "Zombie Rush",
-		Suits = "Zombie Rush",
-		Studs = "Zombie Rush",
-		Jackets = "Zombie Rush",
-		Cosmetics = "Phantom Forces",
-	}
-
-	local Known_Names = {
-		['Head'] = {
-			["Head"] = "Head",
-		},
-		['HumanoidRootPart'] = {
-			['Torso'] = "Every Game",
-			["UpperTorso"] = "Every Game",
-			['Abdomen'] = "BadBuisness",
-		}
-	}
-
-	function UpdateTargets()
-
-	end
-
-	local hasProperty = function(object, prop)
-		local t = object[prop]
-	end
-
-	function NotTeam(Player)
-		if Services.Players:FindFirstChild(Player) then
-			return Services.Players[Player].Team ~= Services.Players.LocalPlayer.Team and Services.Players[Player].TeamColor ~= Services.Players.LocalPlayer.TeamColor
-		end
-
-		return true
-	end
-
-	local Patch_Phantom_Forces = function()
-		spawn(function()
-			Client = {}
-			for i,v in next,getgc(true) do
-				if type(v) == "table" and rawget(v,"getbodyparts") then
-					Client.Characters = getupvalue(v.getbodyparts,1)
-					break
-				end
-			end
-			while true do
-				for i,v in next,Services.Players:GetPlayers() do
-					if v ~= Services.Players.LocalPlayer then
-						local Character = Client.Characters[v]
-						if Character then
-							Character.head.Parent.Name = v.Name
-							v.Character = Character.head.Parent
-						end
-					end
-				end
-				FastWait()
-			end
-		end)
-	end
-
-	if game.CreatorId == 1103278 then --Phantom Forces
-		Patch_Phantom_Forces()
-	end
-
-	function EspPosition(Part)
-		local Position = Services.Workspace.CurrentCamera:WorldToViewportPoint(Part.Position)
-		return Vector2.new(Position.X - Part.Size.X / 2,Position.Y - Part.Size.Y / 2)
-	end
-
-	function EspPosition2(Part)
-		local Position = Services.Workspace.CurrentCamera:WorldToViewportPoint(Part.Position + Vector3.new(0,0.5 + Part.Size.Y / 2,0))
-
-		return Vector2.new(Position.X - Part.Size.X / 2,Position.Y - Part.Size.Y / 2)
-	end
-
-	function WorldToViewportPoint(Position)
-		return Services.Workspace.CurrentCamera:WorldToViewportPoint(Position)
-	end
-
-	if game.PlaceId == 379614936 or game.PlaceId == 5006801542 or game.CreatorId == 113657341 then -- Assassin
-		function UpdateTargets()
-			local TargetText =Services.Players.LocalPlayer:FindFirstChild("TargetText",true)
-			if TargetText then
-				Target = Services.Players:FindFirstChild(TargetText.Text)
-			end
-		end
-	elseif game.PlaceId == 142823291 then -- Murder Mystery 2
-		local GetPlayerData = Services.ReplicatedStorage.GetPlayerData
-
-		function UpdateTargets()
-			local Roles = GetPlayerData:InvokeServer()
-
-			Target = nil
-			Sheriff = nil
-
-			for i,v in next,Roles do
-				if v.Role == "Murderer" then
-					Target = Services.Players:FindFirstChild(i)
-				elseif v.Role == "Hero" then
-					Sheriff = Services.Players:FindFirstChild(i)
-				end
-			end
-
-			if not Sheriff then
-				for i,v in next,Roles do
-					if v.Role == "Sheriff" then
-						Sheriff = Services.Players:FindFirstChild(i)
-
-						break
-					end
-				end
-			end
-		end
-	elseif game.PlaceId == 1167791961 then -- Knife Simulator
-		function UpdateTargets()
-			Target = nil
-
-			for i,v in next,Services.Players:GetPlayers() do
-				if v.Character and v.Character:FindFirstChild("crown") then
-					Target = v
-
-					break
-				end
-			end
-		end
-	elseif game.PlaceId == 621129760 then -- KAT!
-		function UpdateTargets()
-			local TargetName =Services.Players.LocalPlayer:FindFirstChild("TargetName",true)
-			if TargetName then
-				Target = Services.Players:FindFirstChild(TargetName.Text)
-			end
-		end
-	elseif game.PlaceId == 893973440 then -- Flee the Facility
-		function UpdateTargets()
-			Target = nil
-			for i,v in next,Services.Players:GetPlayers() do
-				if v.Character and v.Character:FindFirstChild("Gemstone") then
-					Target = v
-					break
-				end
-			end
-		end
-	elseif game.PlaceId == 3233893879 then -- Bad Business
-		Client = require(Services.ReplicatedStorage.TS)
-
-		function NotTeam(Player)
-			if Services.Players:FindFirstChild(Player) then
-				return Client.Teams:GetPlayerTeam(Services.Players[Player]) ~= Client.Teams:GetPlayerTeam(Services.Players.LocalPlayer)
-			end
-			return true
-		end
-	end
-
-	Services.RunService.RenderStepped:Connect(function()
-		if UpdateTargets then
-			UpdateTargets()
-		end
-	end)
-
-	local Heads,RootParts = {},{}
-	spawn(function()
-		for i,v in next,Services.Workspace:GetDescendants() do
-			if i % 50 == 0 then FastWait() end
-			for k,va in pairs(Known_Names) do
-				if table.find(Classes,v.ClassName) and v.Parent and v.Parent.Name ~=Services.Players.LocalPlayer.Name and v.Parent.Name ~= "" and not Banned_Names[v.Parent.Name] and Known_Names.HumanoidRootPart[v.Name] and k == "Head" and v.Parent:FindFirstChild(va[k]) then
-					local success = pcall(function() hasProperty(v.Parent.Head, "Position") end)
-					if success then
-						table.insert(Heads,v.Parent.Head)
-					end
-				end
-			end
-		end
-	end)
-
-	Services.Workspace.DescendantAdded:Connect(function(v)
-		repeat
-			wait()
-		until v ~= nil;
-		local egh;
-		if v ~= nil then
-			egh = true
-		else
-			egh = false
-		end
-		if egh then
-			for k,va in pairs(Known_Names) do
-				if egh and table.find(Classes,v.ClassName) and v.Parent and v.Parent.Name ~= Services.Players.LocalPlayer.Name and v.Parent.Name ~= "" and not Banned_Names[v.Parent.Name] and Known_Names.HumanoidRootPart[v.Name] and k == "Head" and v.Parent:FindFirstChild(va[k]) then
-					local success = pcall(function() hasProperty(v.Parent.Head, "Position") end)
-					if success then
-						table.insert(Heads,v.Parent.Head)
-					end
-				end
-			end
-		end
-	end)
-
-	Services.Workspace.DescendantRemoving:Connect(function(v)
-		if table.find(Heads,v) then
-			table.remove(Heads,table.find(Heads,v))
-		end
-	end)
-
-	spawn(function()
-		for i,v in next,Services.Workspace:GetDescendants() do
-			if i % 50 == 0 then FastWait() end
-			for k,va in pairs(Known_Names) do
-				if table.find(Classes,v.ClassName) and v.Parent and v.Parent.Name ~=Services.Players.LocalPlayer.Name and v.Parent.Name ~= "" and not Banned_Names[v.Parent.Name] and Known_Names.HumanoidRootPart[v.Name] and k == "Head" and v.Parent:FindFirstChild(va[k]) then
-					local success = pcall(function() hasProperty(v, "Position") end)
-					if success then
-						table.insert(RootParts,v)
-					end
-				end
-			end
-		end
-	end)
-	Services.Workspace.DescendantAdded:Connect(function(v)
-		repeat
-			wait()
-		until v ~= nil;
-		local egh;
-		if v ~= nil then
-			egh = true
-		else
-			egh = false
-		end
-		if egh then
-			for k,va in pairs(Known_Names) do
-				if egh and table.find(Classes,v.ClassName) and v.Parent and v.Parent.Name ~=Services.Players.LocalPlayer.Name and v.Parent.Name ~= "" and not Banned_Names[v.Parent.Name] and Known_Names.HumanoidRootPart[v.Name] and k == "Head" and v.Parent:FindFirstChild(va[k]) then
-					local success = pcall(function() hasProperty(v, "Position") end)
-					if success then
-						table.insert(RootParts,v)
-					end
-				end
-			end
-		end
-	end)
-
-	Services.Workspace.DescendantRemoving:Connect(function(v)
-		if table.find(RootParts,v) then
-			table.remove(RootParts,table.find(RootParts,v))
-		end
-	end)
-
-	spawn(function()
-		local get_my_pos = function()
-			pcall(function()
-				if Services.Players.LocalPlayer.Head then
-					return Services.Players.LocalPlayer.Head
-				else
-					return Services.Players.LocalPlayer.Head
-				end
-			end)
-		end
-	end)
-
-	function Get_Closest_Root()
-		local part;
-		local shortestDistance = MAXDISTANCE * 2;
-		for i,v in next,RootParts do
-			local Head_x = v
-			local pos = Services.Workspace.CurrentCamera:WorldToViewportPoint(Head_x.Position)
-			local magnitude = (Vector2.new(pos.X, pos.Y) - Services.UserInputService:GetMouseLocation()).magnitude
-			if magnitude <= shortestDistance and Head_x.Parent then
-				local hm = Head_x.Parent:FindFirstChild("Humanoid") or nil;
-				if hm then
-					if hm.Health <= 0 then
-						shortestDistance = magnitude
-						part = Services.Players.LocalPlayer
-					else
-						local mags = Services.Players.LocalPlayer:DistanceFromCharacter(Head_x.Position)
-						if checkkFar == true and mags <= EspDistance or not checkkFar then
-							shortestDistance = magnitude
-							part = Head_x
-						end
-					end
-				else
-					local mags = Services.Players.LocalPlayer:DistanceFromCharacter(Head_x.Position)
-					if checkkFar == true and mags <= EspDistance or not checkkFar then
-						shortestDistance = magnitude
-						part = Head_x
-					end
-				end
-			end
-		end
-		return part;
-	end
-
-	function Get_Closest_Head()
-		local part;
-		local shortestDistance = MAXDISTANCE * 2;
-		for i,v in next,Heads do
-			local Head_x = v
-			local pos = Services.Workspace.CurrentCamera:WorldToViewportPoint(Head_x.Position)
-			local magnitude = (Vector2.new(pos.X, pos.Y) - Services.UserInputService:GetMouseLocation()).magnitude
-			if magnitude <= shortestDistance and Head_x.Parent then
-				local hm = Head_x.Parent:FindFirstChild("Humanoid") or nil;
-				if hm then
-					if hm.Health <= 0 then
-						shortestDistance = magnitude
-						part = Services.Players.LocalPlayer
-					else
-						local mags = Services.Players.LocalPlayer:DistanceFromCharacter(Head_x.Position)
-						if checkkFar == true and mags <= EspDistance or not checkkFar then
-							shortestDistance = magnitude
-							part = Head_x
-						end
-					end
-				else
-					local mags = Services.Players.LocalPlayer:DistanceFromCharacter(Head_x.Position)
-					if checkkFar == true and mags <= EspDistance or not checkkFar then
-						shortestDistance = magnitude
-						part = Head_x
-					end
-				end
-			end
-		end
-		return part;
-	end
-
-	spawn(function()
-		local Circle = Drawing.new("Circle")
-		Circle.Visible = false
-		Circle.Position = Vector2.new(mouse.X, mouse.Y)
-		Circle.Color = Color3.fromRGB(220, 53, 53)
-		Circle.Thickness = 0.1
-		Circle.NumSides = 10000
-		Circle.Radius = MAXDISTANCE
-		Circle.Filled = false
-		while true do
-			wait(0.01)
-			if ButtonOn == true and showfovaimbot == true then
-				pcall(function()
-					Circle.Position = Vector2.new(mouse.X, mouse.Y)
-					Circle.Radius = MAXDISTANCE
-					Circle.Color = CircLeCol
-					Circle.Visible = true
-				end)
-			else
-				pcall(function()
-					Circle.Position = Vector2.new(mouse.X, mouse.Y)
-					Circle.Radius = MAXDISTANCE
-					Circle.Visible = false
-				end)
-			end
-		end --)
-	end)
-
-	local AimbotToggleBindt = "e"
-	aimbot:Box("Ai","string",function(brrr)
-		AimbotToggleBindt =  brrr
-	end)
-	aimbot:Label("Default Key 'e' ^", Color3.fromRGB(38, 38, 38), Color3.fromRGB(0, 216, 111))
-
-	UserInputService.InputBegan:Connect(function(Input)
-		local Letter = string.upper(AimbotToggleBindt)
-		if Input.KeyCode == Enum.KeyCode[Letter] then
-			if ButtonOn == false then
-				ButtonOn = true
-			else
-				ButtonOn = false
-			end
-		end
-	end)
-
-	local hasProperty = function(object, prop)
-		local t = object[prop]
-	end
-
-	local Render_Yes = function()
-		settings().Rendering.QualityLevel = "Level01"
-		for i,v in pairs(game:GetDescendants()) do
-			local success = pcall(function() hasProperty(v, "Material") end)
-			if success and v.Name ~= "HumanoidRootPart" then
-				v.Material = "Plastic"
-			end
-		end
-		game:GetService("Workspace").DescendantAdded:Connect(function(v)
-			wait()
-			local success = pcall(function() hasProperty(v, "Material") end)
-			if success and v.Name ~= "HumanoidRootPart" then
-				v.Material = "Plastic"
-			end
-		end)
-	end
-
-	local FpsBoost = function()
-		Render_Yes()
-	end
-
-	fpsboost:Button("Boost! (face kill)",function()
-		FpsBoost()
-	end)
-
-	fpsboost:Button("Boost! (no face kill)",function()
-		local Render_Yes = function()
-			for i,v in pairs(game:GetDescendants()) do
-
-				if v.ClassName == ("Decal") and v.Name ~= "face" then
-					v:Destroy()
-				end 
-				if v.ClassName == ("Texture") then
-					v:Destroy()
-				end
-				if v.ClassName == ("ParticleEmitter") or v.ClassName == ("Trail") then
-					v.Lifetime = NumberRange.new(0)
-				end
-				if v.ClassName == ("Explosion") then
-					v.BlastPressure = 1
-					v.BlastRadius = 1
-				end
-				if v.ClassName == ("Fire") or v.ClassName == ("SpotLight") or v.ClassName == ("Smoke") or v.ClassName == ("Sparkles") then
-					v.Enabled = false
-				end
-				if v.ClassName == ("BlurEffect") or v.ClassName == ("SunRaysEffect") or v.ClassName == ("ColorCorrectionEffect") or v.ClassName == ("BloomEffect") or v.ClassName == ("DepthOfFieldEffect") then
-					v.Enabled = false
-				end
-			end
-			game.DescendantAdded:Connect(function(v)
-				wait()
-				if v.ClassName == ("Decal") and v.Name ~= "face" then
-					v:Destroy()
-				end 
-				if v.ClassName == ("Texture") then
-					v:Destroy()
-				end
-				if v.ClassName == ("ParticleEmitter") or v.ClassName == ("Trail") then
-					v.Lifetime = NumberRange.new(0)
-				end
-				if v.ClassName == ("Explosion") then
-					v.BlastPressure = 1
-					v.BlastRadius = 1
-				end
-				if v.ClassName == ("Fire") or v.ClassName == ("SpotLight") or v.ClassName == ("Smoke") or v.ClassName == ("Sparkles") then
-					v.Enabled = false
-				end
-				if v.ClassName == ("BlurEffect") or v.ClassName == ("SunRaysEffect") or v.ClassName == ("ColorCorrectionEffect") or v.ClassName == ("BloomEffect") or v.ClassName == ("DepthOfFieldEffect") then
-					v.Enabled = false
-				end
-			end)
-		end
-		settings().Rendering.QualityLevel = "Level01"
-		sethiddenproperty(game.Lighting,"Technology",2)
-		sethiddenproperty(game.Workspace.Terrain,"Decoration",false)
-		game.Lighting.GlobalShadows = false
-		game.Lighting.FogEnd = 9e9
-		game.Lighting.Brightness = 0
-		Render_Yes()
-	end)
-
-	aimbot:Dropdown("Aim At",{"Head", "HumanoidRootPart"},true,function(okk)
-		hitp = okk
-	end)
-
-	aimbot:Dropdown("Aim Key",{"Left Mouse", "Right Mouse"},true,function(okk)
-		aimbotkey = okk
-	end)
-
-	Teamm:Toggle("Team Check",function(toggled)
-		TeamCheck = toggled;
-	end)
-
-	Teamm:Toggle("Esp&Lock Distance Check",function(toggled)
-		checkkFar = toggled
-	end)
-
-	aimbot:Toggle("Knife Style Locking Aim",function(bap)
-		KnifeAim = bap
-	end)
-
-	aimbot:Toggle("Show FOV Assisting",function(bap)
-		showfovaimbot = bap
-	end)
-
-	aimbot:Toggle("Distance Check",function(bap)
-		checkkFar = bap
-	end)
-
-	aimbot:Slider("FOV Size",0,1000,true,function(value)
-		MAXDISTANCE = value
-	end)
-
---[[aimbot:Slider("Max Distance",0,1999,true,function(value)
-    maxDistanceeee = value
-end)]]
-
-	aimbot:Slider("X Offset",-200,200,true,function(value)
-		aimbotxpos = (value - (value * 2))
-	end)
-
-	aimbot:Slider("Y Offset",-200,200,true,function(value)
-		aimbotypos = (value - (value * 2))
-	end)
-
-	aimbot:ColorPicker("FOV Color",Color3.fromRGB(220, 53, 53),function(color)
-		CircLeCol = color
-	end)
-
-	espsettings:Toggle("Esp",function(bap)
-		allesp = bap
-		local LineEsp = allesp;
-		local BoxEsp = allesp;
-		local TextEsp = allesp;
-	end)
-
-	espsettings:Toggle("Tracers",function(bap)
-		LineEsp = bap
-	end)
-
-	espsettings:Toggle("Boxes",function(bap)
-		BoxEsp = bap
-	end)
-
-	espsettings:Toggle("Names",function(bap)
-		TextEsp = bap
-	end)
-
-	local oldb = 1200;
-	Teamm:Slider("Esp&Lock Distance Check",0,1200,true,function(value)
-		oldb = value;
-		EspDistance = value
-	end)
-
-	Teamm:Toggle("Infinity Distance",function(bap)
-		if bap == true then
-			EspDistance = 999999999
-		else
-			EspDistance = oldb
-		end
-	end)
-
-	Teamm:Toggle("visibility check",function(toggled)
-		Esplockvis = toggled;
-	end)
-	espsettings:Slider("Text Size",1,50,true,function(slided)
-		Esptextsize = slided;
-	end)
-
-	espsettings:Toggle("Text Outline",function(toggled)
-		Esptextoutline = toggled;
-	end)
-
-	espsettings:ColorPicker("Text Outline",Color3.fromRGB(0,0,0),function(color)
-		outlineEspcolor = color
-	end)
-
-	espsettings:Dropdown("Text Font",{"UI","System","Plex","Monospace"},true,function(okk)
-		if okk == "UI" then
-			Esptextfont = 0;
-		elseif okk == "System" then
-			Esptextfont = 1;
-		elseif okk == "Plex" then
-			Esptextfont = 2;
-		elseif okk == "Monospace" then
-			Esptextfont = 3;
-		end
-	end)
-
-	espsettings:ColorPicker("ESP Color",Color3.fromRGB(255, 255, 255),function(color)
-		EspColor = color
-	end)
-
-	espsettings:Toggle("TeamColor",function(balp)
-		ESPTeamColor = balp
-	end)
-
-	function EspText(Part)
-		local txtname = Part.Parent.Name;
-		if txtname == "Body" then
-			txtname = Part.Parent.Parent.Name;
-		end
-		local Text = Drawing.new("Text")
-		Text.Transparency = .60
-		Text.Center = true
-		local turning = false;
-		spawn(function()
-			while wait(.10) do
-				if #(Services.Workspace.CurrentCamera:GetPartsObscuringTarget({Part.Position},{Part.Parent})) == 0 then
-					turning = true;
-				else
-					turning = false;
-				end
-			end
-		end)
-		local Connection
-		Connection = Services.RunService.RenderStepped:Connect(function()
-			if Part:IsDescendantOf(Services.Workspace) and not Banned_Names[txtname] and Part.Name ~= "Cosmetics" then
-				if not Recording and TextEsp and (TeamCheck and NotTeam(txtname) or not TeamCheck) and (Esplockvis and Part.Parent and turning == true or not Esplockvis) then
-					Text.Position = EspPosition2(Part) - Vector2.new(0,Esptextsize / 2)
-					Text.Text = txtname
-					local Position,OnScreen = WorldToViewportPoint(Part.Position)
-					Text.Size = Esptextsize;
-					if Esptextoutline == true then Text.Outline = true; Text.OutlineColor = outlineEspcolor or Color3.fromRGB(0,0,0); else Text.Outline = false end
-					Text.Font = Esptextfont;
-					if Target and txtname == Target.Name then
-						Text.Color = TargetColor
-					elseif Sheriff and txtname == Sheriff.Name then
-						Text.Color = SheriffColor
-					else
-						Text.Color = EspColor
-					end
-					Text.Text = txtname
-					if OnScreen then
-						if checkkFar and Services.Players.LocalPlayer:DistanceFromCharacter(Part.Position) <= (EspDistance or 0) or not checkkFar then
-							Text.Visible = true
-						else
-							Text.Visible = false
-						end
-					else
-						Text.Visible = false
-					end
-				else
-					Text.Visible = false
-				end
-			else
-				Text:Remove()
-				Connection:Disconnect()
-			end
-		end)
-	end
-
-	local EspLine = function(Part)
-		local Line = Drawing.new("Line")
-		Line.From = Vector2.new(960,0)
-		Line.Thickness = 0.1
-		Line.Transparency = .60
-		local turning = false;
-		spawn(function()
-			while wait(.10) do
-				if #(Services.Workspace.CurrentCamera:GetPartsObscuringTarget({Part.Position},{Part.Parent})) == 0 then
-					turning = true;
-				else
-					turning = false;
-				end
-			end
-		end)
-		local Connection
-		Connection = Services.RunService.RenderStepped:Connect(function()
-			if Part:IsDescendantOf(Services.Workspace) and not Banned_Names[Part.Parent.Name] and not Banned_Names[Part.Parent.Parent.Name] then
-				if not Recording and LineEsp and (TeamCheck and (NotTeam(Part.Parent.Name) and NotTeam(Part.Parent.Parent.Name)) or not TeamCheck) and (Esplockvis and Part.Parent and turning == true or not Esplockvis) then
-					Line.To = EspPosition(Part)
-
-					local Position,OnScreen = WorldToViewportPoint(Part.Position)
-
-					if OnScreen then
-						if checkkFar and Services.Players.LocalPlayer:DistanceFromCharacter(Part.Position) <= (EspDistance or 0) or checkkFar == false then
-							Line.Visible = true
-						else
-							Line.Visible = false
-						end
-					else
-						Line.Visible = false
-					end
-
-					if Target and Part.Parent.Name == Target.Name then
-						Line.Color = TargetColor
-					elseif Sheriff and Part.Parent.Name == Sheriff.Name then
-						Line.Color = SheriffColor
-					else
-						Line.Color = EspColor
-					end
-				else
-					Line.Visible = false
-				end
-			else
-				Line:Remove()
-				Connection:Disconnect()
-			end
-		end)
-	end
-
-	local EspBox = function(Part,Part2)
-		local Quad = Drawing.new("Quad")
-		Quad.Thickness = 0.5
-		Quad.Transparency = .60
-		local turning = false;
-		spawn(function()
-			while wait(.10) do
-				if #(Services.Workspace.CurrentCamera:GetPartsObscuringTarget({Part.Position},{Part.Parent})) == 0 then
-					turning = true;
-				else
-					turning = false;
-				end
-			end
-		end)
-		local Connection
-		Connection = Services.RunService.RenderStepped:Connect(function()
-			if Part:IsDescendantOf(Services.Workspace) and Part2:IsDescendantOf(Services.Workspace) and not Banned_Names[Part.Parent.Name] and not Banned_Names[Part.Parent.Parent.Name] then
-				if not Recording and BoxEsp and (TeamCheck and (NotTeam(Part.Parent.Name) and NotTeam(Part.Parent.Parent.Name)) or not TeamCheck) and (Esplockvis and Part.Parent and turning == true or not Esplockvis) then
-					local Position,OnScreen = WorldToViewportPoint(Part2.Position)
-					if OnScreen then
-						if checkkFar and Services.Players.LocalPlayer:DistanceFromCharacter(Part.Position) <= (EspDistance or 0) or checkkFar == false then
-							local Offset = Vector3.new(2,3,0)
-							local TopLeft = WorldToViewportPoint((Part2.CFrame * CFrame.new(Offset.X,Offset.Y,0)).Position)
-							local TopRight = WorldToViewportPoint((Part2.CFrame * CFrame.new(-Offset.X,Offset.Y,0)).Position)
-							local BottomLeft = WorldToViewportPoint((Part2.CFrame * CFrame.new(Offset.X,-Offset.Y,0)).Position)
-							local BottomRight = WorldToViewportPoint((Part2.CFrame * CFrame.new(-Offset.X,-Offset.Y,0)).Position)
-							Quad.PointA = Vector2.new(TopRight.X,TopRight.Y);
-							Quad.PointB = Vector2.new(TopLeft.X,TopLeft.Y);
-							Quad.PointC = Vector2.new(BottomLeft.X,BottomLeft.Y);
-							Quad.PointD = Vector2.new(BottomRight.X,BottomRight.Y);
-							Quad.Visible = true;
-						else
-							Quad.Visible = false;
-						end
-					else
-						Quad.Visible = false;
-					end
-
-					if Target and Part.Parent.Name == Target.Name then
-						Quad.Color = TargetColor;
-					elseif Sheriff and Part.Parent.Name == Sheriff.Name then
-						Quad.Color = SheriffColor;
-					else
-						Quad.Color = EspColor;
-					end
-				else
-					Quad.Visible = false;
-				end
-			else
-				Quad:Remove()
-				Connection:Disconnect()
-			end
-		end)
-	end
-
-	function UpdateEsp(Type)
-		if Type == "Text" then
-			spawn(function()
-				for i,v in next,Services.Workspace:GetDescendants() do
-					if i % 150 == 0 then FastWait() end
-					for i2,v2 in next,Known_Names.Head do
-						if table.find(Classes,v.ClassName) and v.Parent and v.Parent.Name ~= Services.Players.LocalPlayer.Name and v.Parent.Name ~= "" and not Banned_Names[v.Parent.Name] and Known_Names.HumanoidRootPart[v.Name] and v.Parent:FindFirstChild(i2) then
-							EspText(v.Parent[i2])
-							break;
-						end
-					end
-				end
-			end)
-			Services.Workspace.DescendantAdded:Connect(function(v)
-				wait()
-				if table.find(Classes,v.ClassName) and v.Parent and v and v.Parent.Name ~= Services.Players.LocalPlayer.Name and v.Parent.Name ~= "" and not Banned_Names[v.Parent.Name] and Known_Names.Head[v.Name] then
-					EspText(v)
-				end
-			end)
-		elseif Type == "Lines" then
-			spawn(function()
-				for i,v in next,Services.Workspace:GetDescendants() do
-					if i % 150 == 0 then FastWait() end
-					for k,va in pairs(Known_Names) do
-						if table.find(Classes,v.ClassName) and v.Parent and v.Parent.Name ~=Services.Players.LocalPlayer.Name and v.Parent.Name ~= "" and not Banned_Names[v.Parent.Name] and Known_Names.HumanoidRootPart[v.Name] and k == "Head" and v.Parent:FindFirstChild(va[k]) then
-							local one = v.Parent.Head
-							EspLine(one)
-						end
-					end
-				end
-			end)
-			Services.Workspace.DescendantAdded:Connect(function(v)
-				wait()
-				for k,va in pairs(Known_Names) do
-					if table.find(Classes,v.ClassName) and v.Parent and v.Parent.Name ~=Services.Players.LocalPlayer.Name and v.Parent.Name ~= "" and not Banned_Names[v.Parent.Name] and Known_Names.HumanoidRootPart[v.Name] and k == "Head" and v.Parent:FindFirstChild(va[k]) then
-						local one = v.Parent.Head
-						EspLine(one)
-					end
-				end
-			end)
-		elseif Type == "Boxes" then
-			spawn(function()
-				for i,v in next,Services.Workspace:GetDescendants() do
-					if i % 150 == 0 then FastWait() end
-					for k,va in pairs(Known_Names) do
-						if table.find(Classes,v.ClassName) and v.Parent and v.Parent.Name ~=Services.Players.LocalPlayer.Name and v.Parent.Name ~= "" and not Banned_Names[v.Parent.Name] and Known_Names.HumanoidRootPart[v.Name] and k == "Head" and v.Parent:FindFirstChild(va[k]) then
-							local one = v.Parent.Head --Head
-							local two = v --RootPart
-							EspBox(one,two)
-						end
-					end
-				end
-			end)
-			Services.Workspace.DescendantAdded:Connect(function(v)
-				wait()
-				for k,va in pairs(Known_Names) do
-					if table.find(Classes,v.ClassName) and v.Parent and v.Parent.Name ~=Services.Players.LocalPlayer.Name and v.Parent.Name ~= "" and not Banned_Names[v.Parent.Name] and Known_Names.HumanoidRootPart[v.Name] and k == "Head" and v.Parent:FindFirstChild(va[k]) then
-						local one = v.Parent.Head
-						local two = v
-						EspBox(one,two)
-					end
-				end
-			end)
-		end
-	end
-
-	espsettings:Button("ALL",function()
-		UpdateEsp("Text")
-		UpdateEsp("Lines")
-		UpdateEsp("Boxes")
-	end)
-
-	espsettings:Button("Tracers",function()
-		UpdateEsp("Lines")
-	end)
-
-	espsettings:Button("Boxes",function()
-		UpdateEsp("Boxes")
-	end)
-
-	espsettings:Button("Names",function()
-		UpdateEsp("Text")
-	end)
-
-	local Old = Get_Closest_Head()
-	getgenv().Updatee = function()
-		if hitp == "Head" then
-			Old = Get_Closest_Head()
-		else
-			Old = Get_Closest_Root()
-		end
-	end
-
-	getgenv().Update = function()
-		if Get_Closest_Head() == Services.Players.LocalPlayer then
-			Updatee()
-		else
-			Updatee()
-		end
-		if Get_Closest_Root() == Services.Players.LocalPlayer then
-			Updatee()
-		else
-			Updatee()
-		end
-	end
-
-	UserInputService.InputBegan:Connect(function(Input)
-		if Input.UserInputType == Enum.UserInputType.MouseButton2 then
-			if aimbotkey == "Right Mouse" then
-				getgenv().aimboton = true
-				Update()
-			end
-		end
-	end)
-
-	UserInputService.InputEnded:Connect(function(Input)
-		if Input.UserInputType == Enum.UserInputType.MouseButton2 then
-			if aimbotkey == "Right Mouse" then
-				getgenv().aimboton = false
-			end
-		end
-	end)
-
-	UserInputService.InputBegan:Connect(function(Input)
-		if Input.UserInputType == Enum.UserInputType.MouseButton1 then
-			if aimbotkey == "Left Mouse" then
-				getgenv().aimboton = true
-				Update()
-			end
-		end
-	end)
-
-	UserInputService.InputEnded:Connect(function(Input)
-		if Input.UserInputType == Enum.UserInputType.MouseButton1 then
-			if aimbotkey == "Left Mouse" then
-				getgenv().aimboton = false
-			end
-		end
-	end)
-
-	spawn(function()
-		local turning = false;
-		spawn(function()
-			while wait(.06) do
-				if Get_Closest_Root() ~= Services.Players.LocalPlayer and Get_Closest_Head() ~= Services.Players.LocalPlayer and Old and Old.Parent and Old ~= Services.Players.LocalPlayer and #(Services.Workspace.CurrentCamera:GetPartsObscuringTarget({Old.Position},{Old.Parent})) == 0 then
-					turning = true;
-				else
-					turning = false;
-				end
-			end
-		end)
-		game:GetService("RunService").Stepped:Connect(function()
-			spawn(function()
-				if EspDistance == nil then
-					EspDistance = math.random(1200)
-				end
-			end)
-			Update()
-			if ButtonOn == true and Get_Closest_Root() ~= Services.Players.LocalPlayer and Get_Closest_Head() ~= Services.Players.LocalPlayer and Old and Old.Parent and Old ~= Services.Players.LocalPlayer then
-				if getgenv().aimboton == true and (checkkFar and Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) <= EspDistance or checkkFar == false) then
-					local g, onscreen = Services.Workspace.CurrentCamera:WorldToScreenPoint(Old.Position)
-					if KnifeAim == true then
-						local aimsss;
-						local Head =  Old
-						local Velocityx = Head.Velocity.X
-						local Velocityy = Head.Velocity.Y
-						local Velocityz = Head.Velocity.Z
-						if Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) <= 20 then
-							aimsss =
-								Head.Position +
-								Vector3.new(
-									(Velocityx >= 1 and 1) or (Velocityx <= -1 and -1) or 0,
-									(Velocityy >= 1 and 1) or (Velocityy <= -1 and -1) or 0,
-									(Velocityz >= 1 and 1) or (Velocityz <= -1 and -1) or 0
-								)
-						elseif Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) >= 20 then
-							aimsss =
-								Head.Position +
-								Vector3.new(
-									(Velocityx >= 2.5 and 2.5) or (Velocityx <= -2.5 and -2.5) or 0,
-									(Velocityy >= 2.5 and 2.5) or (Velocityy <= -2.5 and -2.5) or 0,
-									(Velocityz >= 2.5 and 2.5) or (Velocityz <= -2.5 and -2.5) or 0
-								)
-						elseif Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) <= 40 then
-							aimsss =
-								Head.Position +
-								Vector3.new(
-									(Velocityx >= 3 and 3) or (Velocityx <= -3 and -3) or 0,
-									(Velocityy >= 3 and 3) or (Velocityy <= -3 and -3) or 0,
-									(Velocityz >= 3 and 3) or (Velocityz <= -3 and -3) or 0
-								)
-						elseif Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) >= 40 then
-							aimsss =
-								Head.Position +
-								Vector3.new(
-									(Velocityx >= 3.5 and 3.5) or (Velocityx <= -3.5 and -3.5) or 0,
-									(Velocityy >= 3.5 and 3.5) or (Velocityy <= -3.5 and -3.5) or 0,
-									(Velocityz >= 3.5 and 3.5) or (Velocityz <= -3.5 and -3.5) or 0
-								)
-						elseif Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) <= 60 then
-							aimsss =
-								Head.Position +
-								Vector3.new(
-									(Velocityx >= 4 and 4) or (Velocityx <= -4 and -4) or 4,
-									(Velocityy >= 4 and 4) or (Velocityy <= -4 and -4) or 4,
-									(Velocityz >= 4 and 4) or (Velocityz <= -4 and -4) or 4
-								)
-						elseif Services.Players.LocalPlayer:DistanceFromCharacter( Old.Position) >= 60 then
-							aimsss =
-								Head.Position +
-								Vector3.new(
-									(Velocityx >= 4.5 and 4.5) or (Velocityx <= -4.5 and -4.5) or 0,
-									(Velocityy >= 4.5 and 4.5) or (Velocityy <= -4.5 and -4.5) or 0,
-									(Velocityz >= 4.5 and 4.5) or (Velocityz <= -4.5 and -4.5) or 0
-								)
-						elseif Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) <= 80 then
-							aimsss =
-								Head.Position +
-								Vector3.new(
-									(Velocityx >= 5 and 5) or (Velocityx <= -5 and -5) or 0,
-									(Velocityy >= 5 and 5) or (Velocityy <= -5 and -5) or 0,
-									(Velocityz >= 5 and 5) or (Velocityz <= -5 and -5) or 0
-								)
-						elseif Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) >= 80 then
-							aimsss =
-								Head.Position +
-								Vector3.new(
-									(Velocityx >= 5.5 and 5.5) or (Velocityx <= -5.5 and -5.5) or 0,
-									(Velocityy >= 5.5 and 5.5) or (Velocityy <= -5.5 and -5.5) or 0,
-									(Velocityz >= 5.5 and 5.5) or (Velocityz <= -5.5 and -5.5) or 0
-								)
-						end
-						pcall(function() if onscreen and Old and (TeamCheck and (NotTeam(Old.Parent.Name) and NotTeam(Old.Parent.Parent.Name)) or not TeamCheck) and (Esplockvis and Old and turning == true or not Esplockvis) then
-								return mousemoverel(Services.Workspace.CurrentCamera:WorldToScreenPoint(aimsss).X - Services.Workspace.CurrentCamera:WorldToScreenPoint(mouse.Hit.p).X + aimbotxpos,Services.Workspace.CurrentCamera:WorldToScreenPoint(aimsss).Y - Services.Workspace.CurrentCamera:WorldToScreenPoint(mouse.Hit.p).Y + aimbotypos)
-							end end)
-					else
-						aimsss = Old.Position;
-						pcall(function() if onscreen and Old and (TeamCheck and (NotTeam(Old.Parent.Name) and NotTeam(Old.Parent.Parent.Name)) or not TeamCheck) and (Esplockvis and Old and turning == true or not Esplockvis) then
-								return mousemoverel(Services.Workspace.CurrentCamera:WorldToScreenPoint(aimsss).X - Services.Workspace.CurrentCamera:WorldToScreenPoint(mouse.Hit.p).X + aimbotxpos,Services.Workspace.CurrentCamera:WorldToScreenPoint(aimsss).Y - Services.Workspace.CurrentCamera:WorldToScreenPoint(mouse.Hit.p).Y + aimbotypos)
-							end end)
-					end
-				end
-			end
-		end)
-	end)
-	spawn(function()
-		repeat
-			wait()
-		until allesp
-		UpdateEsp("Text")
-		UpdateEsp("Lines")
-		UpdateEsp("Boxes")
-		local LineEsp = false;
-		local BoxEsp = false;
-		local TextEsp = false;
-	end)
+        __index = function(Self,Index)
+            return game:GetService(Index)
+        end
+    })
+    Classes = {}
+    for i,v in next,Services.Workspace:GetDescendants() do
+        if (string.find(string.lower(v.ClassName),("part")) or string.find(string.lower(v.ClassName),("union"))) and v.ClassName and v then
+            if not table.find(Classes,v.ClassName) then
+                table.insert(Classes,v.ClassName)
+            end
+        end
+    end
+    local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Jonatanortiz2/Johnny-Test/master/UiLib.lua"))();
+    local window = library:CreateWindow("Drax-Ware alph 1");
+    local Teamm = window:CreateFolder("Esp&Lock Team Check")
+    local aimbot = window:CreateFolder("Assistance Settings");
+    local hbee = window:CreateFolder("HBE Settings");
+    local fpsboost = window:CreateFolder("Frames Per Second Upgrader");
+    local espsettings = window:CreateFolder("Extra-Sensory-Perception (ESP)");
+    local Players = Services.Players
+    local First_Editor = "Jonatan";
+    local Second_Editor = "Sneaky";
+    local Third_Editor = "Xptz";
+    local LineEsp = false;
+    local BoxEsp = false;
+    local TextEsp = false;
+    local Esptextfont = 0;
+    local EspDistance = 1200;
+    local Esptextsize = 18;
+    local Esptextoutline = false;
+    local TargetColor = Color3.fromRGB(220,53,53);
+    local SheriffColor = Color3.fromRGB(3,173,252);
+    local CircLeCol = Color3.fromRGB(220, 53, 53);
+    local outlineEspcolor = Color3.fromRGB(0,0,0)
+    local EspColor = Color3.fromRGB(255, 255, 255)
+    local Recording = false;
+    local Esplockvis = false;
+    local showfovaimbot = false;
+    local Target;
+    local Sheriff;
+    local TeamCheck = false;
+    local checkkFar = false;
+    --[[local maxDistanceeee = 1200;]]
+    local aimbotypos = 0;
+    local aimbotxpos = 0;
+    local lp = Services.Players.LocalPlayer
+    local UserInputService = Services.UserInputService
+    local MAXDISTANCE = 250;
+    local ButtonOn = false;
+    local aimbotkey = "Right Mouse";
+    local hitp = "Head";
+    local Value = Instance.new("BoolValue")
+    local KnifeAim = false;
+    local mouse = Services.Players.LocalPlayer:GetMouse()
+    
+    function UpdateValue()
+        Value.Value = not Value.Value
+    end
+    
+    Services.RunService.RenderStepped:Connect(UpdateValue)
+    Services.RunService.Stepped:Connect(UpdateValue)
+    Services.RunService.Heartbeat:Connect(UpdateValue)
+    
+    function FastWait()
+        Value.Changed:Wait()
+    end
+    
+    aimbot:Label("Made by: Jonatan & iiSneakyNinja", Color3.fromRGB(38, 38, 38), Color3.fromRGB(0, 216, 111))
+    
+    local Banned_Names = {
+        Raggy = "Murder Mystery 2",
+        Santa = "Murder Mystery 2",
+        Parts = "Murder Mystery 2",
+        EffectLoader = "Murder Mystery 2",
+        ["OOF!"] = "Knife Simulator",
+        CollisionParts = "KAT!",
+        CharStage = "Phantom Forces",
+        DeadBody = "Phantom Forces",
+        ignore = "Phantom Forces",
+        Dead = "Phantom Forces",
+        PlayerModel = "Phantom Forces",
+        RefPlayer = "Phantom Forces",
+        ["BROKER (ZOMBIE)"] = "Phantom Forces",
+        Bear = "The Wild West",
+        Horse = "The Wild West",
+        Deer = "The Wild West", 
+        Gator = "The Wild West",
+        Joe = "The Wild West",
+        Bison = "The Wild West",
+        General = "The Wild West",
+        HitmanHire = "The Wild West",
+        Hunter = "The Wild West",
+        FortHenryNPC = "The Wild West",
+        OutlawGeneral = "The Wild West",
+        OutlawJoe2 = "The Wild West",
+        OutlawGunStore = "The Wild West",
+        OutlawJoe1 = "The Wild West",
+        Statue = "The Wild West",
+        GunStoreNPC = "The Wild West",
+        FortSpencerNPC = "The Wild West",
+        DonationMayor = "The Wild West",
+        Joe2 = "The Wild West",
+        GeneralPuertoDorado = "The Wild West",
+        GunStoreNPCDuertoDorado = "The Wild West",
+        Cow = "The Wild West",
+        TempAuctionHouseDude = "The Wild West",
+        NPCTemplate = "The Wild West",
+        Delores = "The Wild West",
+        GunStoreNPCPuertoDorado = "The Wild West",
+        Barricade = "D-DAY",
+        Dummy = "D-DAY",
+        PassengerSick = "Jailbreak",
+        Player = "Jailbreak",
+        PlayerDriver = "Jailbreak",
+        PlayerPassenger = "Jailbreak",
+        PoliceMan = "Jailbreak",
+        NPC = "Mad City",
+        Dog = "Mad City",
+        TitainDummy = "Mad City",
+        ["SWAT Suit"] = 'Jailbreak',
+        Collector = "Jailbreak",
+        ANTI = "Phantom Forces",
+        ["Special Parts"] = "Da Hood",
+        SpecialParts = "Da Hood",
+        ["Can i get the Red bottle"] = "Da Hood",
+        ["Can i get the Green bottle"] = "Da Hood",
+        ["Can i get the Blue bottle"] = "Da Hood",
+        ["Help the patient for money"] = "Da Hood",
+        ["Clean the shoes on the floor and come to me for cash"] = "Da Hood",
+        ["Join/Leave"] = "Da Hood",
+        Staff = "Zombie Rush",
+        FracturedBogo = "Zombie Rush",
+        FracturedBWBogo = "Zombie Rush",
+        CherryBlossom = "Zombie Rush",
+        Beacon = "Zombie Rush",
+        Suits = "Zombie Rush",
+        Studs = "Zombie Rush",
+        Jackets = "Zombie Rush",
+      	Cosmetics = "Phantom Forces",
+    }
+    
+    local Known_Names = {
+        ['Head'] = {
+        	["Head"] = "Head",
+          },
+          ['HumanoidRootPart'] = {
+            ['Torso'] = "Every Game",
+            ["UpperTorso"] = "Every Game",
+        	['Abdomen'] = "BadBuisness",
+          }
+    }
+    
+    function UpdateTargets()
+    	
+    end
+    
+    local hasProperty = function(object, prop)
+        local t = object[prop]
+    end
+    
+    function NotTeam(Player)
+      	if Services.Players:FindFirstChild(Player) then
+    		return Services.Players[Player].Team ~= Services.Players.LocalPlayer.Team and Services.Players[Player].TeamColor ~= Services.Players.LocalPlayer.TeamColor
+      	end
+      	
+    	return true
+    end
+      
+    local Patch_Phantom_Forces = function()
+      	spawn(function()
+            Client = {}
+            for i,v in next,getgc(true) do
+                if type(v) == "table" and rawget(v,"getbodyparts") then
+                    Client.Characters = getupvalue(v.getbodyparts,1)
+                    break
+                end
+            end
+            while true do
+                for i,v in next,Services.Players:GetPlayers() do
+                    if v ~= Services.Players.LocalPlayer then
+                        local Character = Client.Characters[v]
+                        if Character then
+                            Character.head.Parent.Name = v.Name
+                            v.Character = Character.head.Parent
+                        end
+                    end
+                end
+                FastWait()
+            end
+        end)
+    end
+    
+    if game.CreatorId == 1103278 then --Phantom Forces
+        Patch_Phantom_Forces()
+    end
+    
+    function EspPosition(Part)
+        local Position = Services.Workspace.CurrentCamera:WorldToViewportPoint(Part.Position)
+        return Vector2.new(Position.X - Part.Size.X / 2,Position.Y - Part.Size.Y / 2)
+    end
+    
+    function EspPosition2(Part)
+        local Position = Services.Workspace.CurrentCamera:WorldToViewportPoint(Part.Position + Vector3.new(0,0.5 + Part.Size.Y / 2,0))
+    	
+        return Vector2.new(Position.X - Part.Size.X / 2,Position.Y - Part.Size.Y / 2)
+    end
+    
+    function WorldToViewportPoint(Position)
+        return Services.Workspace.CurrentCamera:WorldToViewportPoint(Position)
+    end
+    
+    if game.PlaceId == 379614936 or game.PlaceId == 5006801542 or game.CreatorId == 113657341 then -- Assassin
+        function UpdateTargets()
+            local TargetText =Services.Players.LocalPlayer:FindFirstChild("TargetText",true)
+            if TargetText then
+                Target = Services.Players:FindFirstChild(TargetText.Text)
+            end
+        end
+    elseif game.PlaceId == 142823291 then -- Murder Mystery 2
+        local GetPlayerData = Services.ReplicatedStorage.GetPlayerData
+    
+        function UpdateTargets()
+            local Roles = GetPlayerData:InvokeServer()
+    
+            Target = nil
+            Sheriff = nil
+    
+            for i,v in next,Roles do
+                if v.Role == "Murderer" then
+                    Target = Services.Players:FindFirstChild(i)
+                elseif v.Role == "Hero" then
+                    Sheriff = Services.Players:FindFirstChild(i)
+                end
+            end
+    
+            if not Sheriff then
+                for i,v in next,Roles do
+                    if v.Role == "Sheriff" then
+                        Sheriff = Services.Players:FindFirstChild(i)
+    
+                        break
+                    end
+                end
+            end
+        end
+    elseif game.PlaceId == 1167791961 then -- Knife Simulator
+        function UpdateTargets()
+            Target = nil
+    
+            for i,v in next,Services.Players:GetPlayers() do
+                if v.Character and v.Character:FindFirstChild("crown") then
+                    Target = v
+    
+                    break
+                end
+            end
+        end
+    elseif game.PlaceId == 621129760 then -- KAT!
+        function UpdateTargets()
+            local TargetName =Services.Players.LocalPlayer:FindFirstChild("TargetName",true)
+            if TargetName then
+                Target = Services.Players:FindFirstChild(TargetName.Text)
+            end
+        end
+    elseif game.PlaceId == 893973440 then -- Flee the Facility
+        function UpdateTargets()
+            Target = nil
+            for i,v in next,Services.Players:GetPlayers() do
+                if v.Character and v.Character:FindFirstChild("Gemstone") then
+                    Target = v
+                    break
+                end
+            end
+        end
+    elseif game.PlaceId == 3233893879 then -- Bad Business
+      	Client = require(Services.ReplicatedStorage.TS)
+      	
+    	function NotTeam(Player)
+        	if Services.Players:FindFirstChild(Player) then
+            	return Client.Teams:GetPlayerTeam(Services.Players[Player]) ~= Client.Teams:GetPlayerTeam(Services.Players.LocalPlayer)
+          	end
+        	return true
+        end
+    end
+    
+    Services.RunService.RenderStepped:Connect(function()
+        if UpdateTargets then
+            UpdateTargets()
+        end
+    end)
+    
+    local Heads,RootParts = {},{}
+    spawn(function()
+        for i,v in next,Services.Workspace:GetDescendants() do
+            if i % 50 == 0 then FastWait() end
+            for k,va in pairs(Known_Names) do
+                if table.find(Classes,v.ClassName) and v.Parent and v.Parent.Name ~=Services.Players.LocalPlayer.Name and v.Parent.Name ~= "" and not Banned_Names[v.Parent.Name] and Known_Names.HumanoidRootPart[v.Name] and k == "Head" and v.Parent:FindFirstChild(va[k]) then
+                    local success = pcall(function() hasProperty(v.Parent.Head, "Position") end)
+                    if success then
+                        table.insert(Heads,v.Parent.Head)
+                    end
+                end
+            end
+        end
+    end)
+    
+    Services.Workspace.DescendantAdded:Connect(function(v)
+        repeat
+          wait()
+        until v ~= nil;
+        local egh;
+        if v ~= nil then
+        	egh = true
+        else
+          	egh = false
+        end
+        if egh then
+            for k,va in pairs(Known_Names) do
+                if egh and table.find(Classes,v.ClassName) and v.Parent and v.Parent.Name ~= Services.Players.LocalPlayer.Name and v.Parent.Name ~= "" and not Banned_Names[v.Parent.Name] and Known_Names.HumanoidRootPart[v.Name] and k == "Head" and v.Parent:FindFirstChild(va[k]) then
+                    local success = pcall(function() hasProperty(v.Parent.Head, "Position") end)
+                    if success then
+                        table.insert(Heads,v.Parent.Head)
+                    end
+                end
+            end
+        end
+    end)
+    
+    Services.Workspace.DescendantRemoving:Connect(function(v)
+        if table.find(Heads,v) then
+            table.remove(Heads,table.find(Heads,v))
+        end
+    end)
+    
+    spawn(function()
+        for i,v in next,Services.Workspace:GetDescendants() do
+            if i % 50 == 0 then FastWait() end
+            for k,va in pairs(Known_Names) do
+                if table.find(Classes,v.ClassName) and v.Parent and v.Parent.Name ~=Services.Players.LocalPlayer.Name and v.Parent.Name ~= "" and not Banned_Names[v.Parent.Name] and Known_Names.HumanoidRootPart[v.Name] and k == "Head" and v.Parent:FindFirstChild(va[k]) then
+                    local success = pcall(function() hasProperty(v, "Position") end)
+                    if success then
+                        table.insert(RootParts,v)
+                    end
+                end
+            end
+        end
+    end)
+    Services.Workspace.DescendantAdded:Connect(function(v)
+         repeat
+          wait()
+        until v ~= nil;
+        local egh;
+        if v ~= nil then
+        	egh = true
+        else
+          	egh = false
+        end
+        if egh then
+            for k,va in pairs(Known_Names) do
+                if egh and table.find(Classes,v.ClassName) and v.Parent and v.Parent.Name ~=Services.Players.LocalPlayer.Name and v.Parent.Name ~= "" and not Banned_Names[v.Parent.Name] and Known_Names.HumanoidRootPart[v.Name] and k == "Head" and v.Parent:FindFirstChild(va[k]) then
+                    local success = pcall(function() hasProperty(v, "Position") end)
+                    if success then
+                        table.insert(RootParts,v)
+                    end
+                end
+            end
+        end
+    end)
+    
+    Services.Workspace.DescendantRemoving:Connect(function(v)
+        if table.find(RootParts,v) then
+            table.remove(RootParts,table.find(RootParts,v))
+        end
+    end)
+    
+    spawn(function()
+        local get_my_pos = function()
+            pcall(function()
+                if Services.Players.LocalPlayer.Head then
+                    return Services.Players.LocalPlayer.Head
+                else
+                    return Services.Players.LocalPlayer.Head
+                end
+            end)
+        end
+    end)
+    
+    function Get_Closest_Root()
+        local part;
+        local shortestDistance = MAXDISTANCE * 2;
+        for i,v in next,RootParts do
+            local Head_x = v
+            local pos = Services.Workspace.CurrentCamera:WorldToViewportPoint(Head_x.Position)
+            local magnitude = (Vector2.new(pos.X, pos.Y) - Services.UserInputService:GetMouseLocation()).magnitude
+        	if magnitude <= shortestDistance and Head_x.Parent then
+          		local hm = Head_x.Parent:FindFirstChild("Humanoid") or nil;
+          		if hm then
+            		if hm.Health <= 0 then
+              			shortestDistance = magnitude
+                        part = Services.Players.LocalPlayer
+            		else
+                        local mags = Services.Players.LocalPlayer:DistanceFromCharacter(Head_x.Position)
+                        if checkkFar == true and mags <= EspDistance or not checkkFar then
+                            shortestDistance = magnitude
+                            part = Head_x
+                        end
+            		end
+            	else
+            		local mags = Services.Players.LocalPlayer:DistanceFromCharacter(Head_x.Position)
+                    if checkkFar == true and mags <= EspDistance or not checkkFar then
+                        shortestDistance = magnitude
+                        part = Head_x
+                    end
+          		end
+            end
+        end
+    	return part;
+    end
+    
+    function Get_Closest_Head()
+        local part;
+        local shortestDistance = MAXDISTANCE * 2;
+        for i,v in next,Heads do
+            local Head_x = v
+            local pos = Services.Workspace.CurrentCamera:WorldToViewportPoint(Head_x.Position)
+            local magnitude = (Vector2.new(pos.X, pos.Y) - Services.UserInputService:GetMouseLocation()).magnitude
+            if magnitude <= shortestDistance and Head_x.Parent then
+          		local hm = Head_x.Parent:FindFirstChild("Humanoid") or nil;
+          		if hm then
+            		if hm.Health <= 0 then
+              			shortestDistance = magnitude
+                        part = Services.Players.LocalPlayer
+            		else
+                        local mags = Services.Players.LocalPlayer:DistanceFromCharacter(Head_x.Position)
+                        if checkkFar == true and mags <= EspDistance or not checkkFar then
+                            shortestDistance = magnitude
+                            part = Head_x
+                        end
+            		end
+            	else
+            		local mags = Services.Players.LocalPlayer:DistanceFromCharacter(Head_x.Position)
+                    if checkkFar == true and mags <= EspDistance or not checkkFar then
+                        shortestDistance = magnitude
+                        part = Head_x
+                    end
+          		end
+            end
+        end
+    	return part;
+    end
+    
+    spawn(function()
+      local Circle = Drawing.new("Circle")
+      Circle.Visible = false
+      Circle.Position = Vector2.new(mouse.X, mouse.Y)
+      Circle.Color = Color3.fromRGB(220, 53, 53)
+      Circle.Thickness = 0.1
+      Circle.NumSides = 10000
+      Circle.Radius = MAXDISTANCE
+      Circle.Filled = false
+      while true do
+      	wait(0.01)
+        if ButtonOn == true and showfovaimbot == true then
+          pcall(function()
+            Circle.Position = Vector2.new(mouse.X, mouse.Y)
+            Circle.Radius = MAXDISTANCE
+            Circle.Color = CircLeCol
+            Circle.Visible = true
+          end)
+        else
+          pcall(function()
+            Circle.Position = Vector2.new(mouse.X, mouse.Y)
+            Circle.Radius = MAXDISTANCE
+            Circle.Visible = false
+          end)
+        end
+      end --)
+    end)
+    
+    local AimbotToggleBindt = "e"
+    aimbot:Box("Ai","string",function(brrr)
+        AimbotToggleBindt =  brrr
+    end)
+    aimbot:Label("Default Key 'e' ^", Color3.fromRGB(38, 38, 38), Color3.fromRGB(0, 216, 111))
+    
+    UserInputService.InputBegan:Connect(function(Input)
+        local Letter = string.upper(AimbotToggleBindt)
+        if Input.KeyCode == Enum.KeyCode[Letter] then
+            if ButtonOn == false then
+                ButtonOn = true
+            else
+                ButtonOn = false
+            end
+        end
+    end)
+    
+    local hasProperty = function(object, prop)
+        local t = object[prop]
+    end
+    
+    local Render_Yes = function()
+        settings().Rendering.QualityLevel = "Level01"
+        for i,v in pairs(game:GetDescendants()) do
+        local success = pcall(function() hasProperty(v, "Material") end)
+        if success and v.Name ~= "HumanoidRootPart" then
+            v.Material = "Plastic"
+        end
+        end
+        game:GetService("Workspace").DescendantAdded:Connect(function(v)
+        wait()
+        local success = pcall(function() hasProperty(v, "Material") end)
+        if success and v.Name ~= "HumanoidRootPart" then
+            v.Material = "Plastic"
+        end
+        end)
+    end
+    
+    local FpsBoost = function()
+        Render_Yes()
+    end
+    
+    fpsboost:Button("Boost! (face kill)",function()
+        FpsBoost()
+    end)
+    
+    fpsboost:Button("Boost! (no face kill)",function()
+        local Render_Yes = function()
+        for i,v in pairs(game:GetDescendants()) do
+            
+            if v.ClassName == ("Decal") and v.Name ~= "face" then
+                v:Destroy()
+            end 
+            if v.ClassName == ("Texture") then
+                v:Destroy()
+            end
+            if v.ClassName == ("ParticleEmitter") or v.ClassName == ("Trail") then
+                v.Lifetime = NumberRange.new(0)
+            end
+            if v.ClassName == ("Explosion") then
+                v.BlastPressure = 1
+                v.BlastRadius = 1
+            end
+            if v.ClassName == ("Fire") or v.ClassName == ("SpotLight") or v.ClassName == ("Smoke") or v.ClassName == ("Sparkles") then
+                v.Enabled = false
+            end
+            if v.ClassName == ("BlurEffect") or v.ClassName == ("SunRaysEffect") or v.ClassName == ("ColorCorrectionEffect") or v.ClassName == ("BloomEffect") or v.ClassName == ("DepthOfFieldEffect") then
+                v.Enabled = false
+            end
+        end
+        game.DescendantAdded:Connect(function(v)
+            wait()
+            if v.ClassName == ("Decal") and v.Name ~= "face" then
+                v:Destroy()
+            end 
+            if v.ClassName == ("Texture") then
+                v:Destroy()
+            end
+            if v.ClassName == ("ParticleEmitter") or v.ClassName == ("Trail") then
+                v.Lifetime = NumberRange.new(0)
+            end
+            if v.ClassName == ("Explosion") then
+                v.BlastPressure = 1
+                v.BlastRadius = 1
+            end
+            if v.ClassName == ("Fire") or v.ClassName == ("SpotLight") or v.ClassName == ("Smoke") or v.ClassName == ("Sparkles") then
+                v.Enabled = false
+            end
+            if v.ClassName == ("BlurEffect") or v.ClassName == ("SunRaysEffect") or v.ClassName == ("ColorCorrectionEffect") or v.ClassName == ("BloomEffect") or v.ClassName == ("DepthOfFieldEffect") then
+                v.Enabled = false
+            end
+        end)
+        end
+        settings().Rendering.QualityLevel = "Level01"
+        sethiddenproperty(game.Lighting,"Technology",2)
+        sethiddenproperty(game.Workspace.Terrain,"Decoration",false)
+        game.Lighting.GlobalShadows = false
+        game.Lighting.FogEnd = 9e9
+        game.Lighting.Brightness = 0
+        Render_Yes()
+    end)
+    
+    aimbot:Dropdown("Aim At",{"Head", "HumanoidRootPart"},true,function(okk)
+        hitp = okk
+    end)
+    
+    aimbot:Dropdown("Aim Key",{"Left Mouse", "Right Mouse"},true,function(okk)
+        aimbotkey = okk
+    end)
+    
+    Teamm:Toggle("Team Check",function(toggled)
+    	TeamCheck = toggled;
+    end)
+    
+    Teamm:Toggle("Esp&Lock Distance Check",function(toggled)
+      	checkkFar = toggled
+    end)
+    
+    aimbot:Toggle("Knife Style Locking Aim",function(bap)
+        KnifeAim = bap
+    end)
+    
+    aimbot:Toggle("Show FOV Assisting",function(bap)
+        showfovaimbot = bap
+    end)
+    
+    aimbot:Slider("FOV Size",0,1000,true,function(value)
+        MAXDISTANCE = value
+    end)
+    
+    --[[aimbot:Slider("Max Distance",0,1999,true,function(value)
+        maxDistanceeee = value
+    end)]]
+    
+    aimbot:Slider("X Offset",-200,200,true,function(value)
+        aimbotxpos = (value - (value * 2))
+    end)
+    
+    aimbot:Slider("Y Offset",-200,200,true,function(value)
+        aimbotypos = (value - (value * 2))
+    end)
+    
+    aimbot:ColorPicker("FOV Color",Color3.fromRGB(220, 53, 53),function(color)
+        CircLeCol = color
+    end)
+    
+    espsettings:Toggle("Esp",function(bap)
+        allesp = bap
+        local LineEsp = allesp;
+        local BoxEsp = allesp;
+        local TextEsp = allesp;
+    end)
+    
+    espsettings:Toggle("Tracers",function(bap)
+        LineEsp = bap
+    end)
+    
+    espsettings:Toggle("Boxes",function(bap)
+        BoxEsp = bap
+    end)
+    
+    espsettings:Toggle("Names",function(bap)
+        TextEsp = bap
+    end)
+    
+    local oldb = 1200;
+    Teamm:Slider("Esp&Lock Distance Check",0,1200,true,function(value)
+        oldb = value;
+        EspDistance = value
+    end)
+    
+    Teamm:Toggle("Infinity Distance",function(bap)
+        if bap == true then
+            EspDistance = 999999999
+        else
+        	EspDistance = oldb
+        end
+    end)
+    
+    Teamm:Toggle("visibility check",function(toggled)
+      	Esplockvis = toggled;
+    end)
+    espsettings:Slider("Text Size",1,50,true,function(slided)
+    	Esptextsize = slided;
+    end)
+    
+    espsettings:Toggle("Text Outline",function(toggled)
+      	Esptextoutline = toggled;
+    end)
+    
+    espsettings:ColorPicker("Text Outline",Color3.fromRGB(0,0,0),function(color)
+    	outlineEspcolor = color
+    end)
+    
+    espsettings:Dropdown("Text Font",{"UI","System","Plex","Monospace"},true,function(okk)
+        if okk == "UI" then
+        	Esptextfont = 0;
+        elseif okk == "System" then
+          	Esptextfont = 1;
+        elseif okk == "Plex" then
+        	Esptextfont = 2;
+        elseif okk == "Monospace" then
+          	Esptextfont = 3;
+        end
+    end)
+    
+    espsettings:ColorPicker("ESP Color",Color3.fromRGB(255, 255, 255),function(color)
+        EspColor = color
+    end)
+    
+    espsettings:Toggle("TeamColor",function(balp)
+        ESPTeamColor = balp
+    end)
+    
+    function EspText(Part)
+      	local txtname = Part.Parent.Name;
+      	if txtname == "Body" then
+        	txtname = Part.Parent.Parent.Name;
+      	end
+        local Text = Drawing.new("Text")
+      	Text.Transparency = .60
+        Text.Center = true
+      	local turning = false;
+      	spawn(function()
+          	while wait(.10) do
+                if #(Services.Workspace.CurrentCamera:GetPartsObscuringTarget({Part.Position},{Part.Parent})) == 0 then
+                    turning = true;
+                else
+                    turning = false;
+                end
+            end
+        end)
+        local Connection
+        Connection = Services.RunService.RenderStepped:Connect(function()
+            if Part:IsDescendantOf(Services.Workspace) and not Banned_Names[txtname] and Part.Name ~= "Cosmetics" then
+                if not Recording and TextEsp and (TeamCheck and NotTeam(txtname) or not TeamCheck) and (Esplockvis and Part.Parent and turning == true or not Esplockvis) then
+                    Text.Position = EspPosition2(Part) - Vector2.new(0,Esptextsize / 2)
+              		Text.Text = txtname
+                    local Position,OnScreen = WorldToViewportPoint(Part.Position)
+              		Text.Size = Esptextsize;
+              		if Esptextoutline == true then Text.Outline = true; Text.OutlineColor = outlineEspcolor or Color3.fromRGB(0,0,0); else Text.Outline = false end
+              		Text.Font = Esptextfont;
+                    if Target and txtname == Target.Name then
+                        Text.Color = TargetColor
+                    elseif Sheriff and txtname == Sheriff.Name then
+                        Text.Color = SheriffColor
+                    else
+                        Text.Color = EspColor
+                    end
+                    Text.Text = txtname
+              		if OnScreen then
+                        if checkkFar and Services.Players.LocalPlayer:DistanceFromCharacter(Part.Position) <= (EspDistance or 0) or not checkkFar then
+                            Text.Visible = true
+                        else
+                  			Text.Visible = false
+                		end
+                    else
+                        Text.Visible = false
+                    end
+                else
+                    Text.Visible = false
+                end
+            else
+                Text:Remove()
+                Connection:Disconnect()
+            end
+        end)
+    end
+    
+    local EspLine = function(Part)
+        local Line = Drawing.new("Line")
+        Line.From = Vector2.new(960,0)
+        Line.Thickness = 0.1
+        Line.Transparency = .60
+      	local turning = false;
+      	spawn(function()
+          	while wait(.10) do
+                if #(Services.Workspace.CurrentCamera:GetPartsObscuringTarget({Part.Position},{Part.Parent})) == 0 then
+                    turning = true;
+                else
+                    turning = false;
+                end
+            end
+        end)
+        local Connection
+        Connection = Services.RunService.RenderStepped:Connect(function()
+            if Part:IsDescendantOf(Services.Workspace) and not Banned_Names[Part.Parent.Name] and not Banned_Names[Part.Parent.Parent.Name] then
+                if not Recording and LineEsp and (TeamCheck and (NotTeam(Part.Parent.Name) and NotTeam(Part.Parent.Parent.Name)) or not TeamCheck) and (Esplockvis and Part.Parent and turning == true or not Esplockvis) then
+                    Line.To = EspPosition(Part)
+    
+                    local Position,OnScreen = WorldToViewportPoint(Part.Position)
+    
+                    if OnScreen then
+                        if checkkFar and Services.Players.LocalPlayer:DistanceFromCharacter(Part.Position) <= (EspDistance or 0) or checkkFar == false then
+                            Line.Visible = true
+                        else
+                            Line.Visible = false
+                        end
+                    else
+                        Line.Visible = false
+                    end
+    
+                    if Target and Part.Parent.Name == Target.Name then
+                        Line.Color = TargetColor
+                    elseif Sheriff and Part.Parent.Name == Sheriff.Name then
+                        Line.Color = SheriffColor
+                    else
+                        Line.Color = EspColor
+                    end
+                else
+                    Line.Visible = false
+                end
+            else
+                Line:Remove()
+                Connection:Disconnect()
+            end
+        end)
+    end
+    
+    local EspBox = function(Part,Part2)
+        local Quad = Drawing.new("Quad")
+        Quad.Thickness = 0.5
+        Quad.Transparency = .60
+    	local turning = false;
+      	spawn(function()
+          	while wait(.10) do
+                if #(Services.Workspace.CurrentCamera:GetPartsObscuringTarget({Part.Position},{Part.Parent})) == 0 then
+                    turning = true;
+                else
+                    turning = false;
+                end
+            end
+        end)
+        local Connection
+        Connection = Services.RunService.RenderStepped:Connect(function()
+            if Part:IsDescendantOf(Services.Workspace) and Part2:IsDescendantOf(Services.Workspace) and not Banned_Names[Part.Parent.Name] and not Banned_Names[Part.Parent.Parent.Name] then
+                if not Recording and BoxEsp and (TeamCheck and (NotTeam(Part.Parent.Name) and NotTeam(Part.Parent.Parent.Name)) or not TeamCheck) and (Esplockvis and Part.Parent and turning == true or not Esplockvis) then
+                    local Position,OnScreen = WorldToViewportPoint(Part2.Position)
+                    if OnScreen then
+                        if checkkFar and Services.Players.LocalPlayer:DistanceFromCharacter(Part.Position) <= (EspDistance or 0) or checkkFar == false then
+                            local Offset = Vector3.new(2,3,0)
+                            local TopLeft = WorldToViewportPoint((Part2.CFrame * CFrame.new(Offset.X,Offset.Y,0)).Position)
+                            local TopRight = WorldToViewportPoint((Part2.CFrame * CFrame.new(-Offset.X,Offset.Y,0)).Position)
+                            local BottomLeft = WorldToViewportPoint((Part2.CFrame * CFrame.new(Offset.X,-Offset.Y,0)).Position)
+                            local BottomRight = WorldToViewportPoint((Part2.CFrame * CFrame.new(-Offset.X,-Offset.Y,0)).Position)
+    						Quad.PointA = Vector2.new(TopRight.X,TopRight.Y);
+                            Quad.PointB = Vector2.new(TopLeft.X,TopLeft.Y);
+                            Quad.PointC = Vector2.new(BottomLeft.X,BottomLeft.Y);
+                            Quad.PointD = Vector2.new(BottomRight.X,BottomRight.Y);
+    						Quad.Visible = true;
+                        else
+                            Quad.Visible = false;
+                        end
+                    else
+                        Quad.Visible = false;
+                    end
+    
+                    if Target and Part.Parent.Name == Target.Name then
+                        Quad.Color = TargetColor;
+                    elseif Sheriff and Part.Parent.Name == Sheriff.Name then
+                        Quad.Color = SheriffColor;
+                    else
+                        Quad.Color = EspColor;
+                    end
+                else
+                    Quad.Visible = false;
+                end
+            else
+                Quad:Remove()
+                Connection:Disconnect()
+            end
+        end)
+    end
+    
+    function UpdateEsp(Type)
+        if Type == "Text" then
+            spawn(function()
+                for i,v in next,Services.Workspace:GetDescendants() do
+                    if i % 150 == 0 then FastWait() end
+                    for i2,v2 in next,Known_Names.Head do
+                        if table.find(Classes,v.ClassName) and v.Parent and v.Parent.Name ~= Services.Players.LocalPlayer.Name and v.Parent.Name ~= "" and not Banned_Names[v.Parent.Name] and Known_Names.HumanoidRootPart[v.Name] and v.Parent:FindFirstChild(i2) then
+                  			EspText(v.Parent[i2])
+                  			break;
+                        end
+                    end
+                end
+            end)
+            Services.Workspace.DescendantAdded:Connect(function(v)
+            	wait()
+            	if table.find(Classes,v.ClassName) and v.Parent and v and v.Parent.Name ~= Services.Players.LocalPlayer.Name and v.Parent.Name ~= "" and not Banned_Names[v.Parent.Name] and Known_Names.Head[v.Name] then
+              		EspText(v)
+            	end
+            end)
+        elseif Type == "Lines" then
+            spawn(function()
+                for i,v in next,Services.Workspace:GetDescendants() do
+                    if i % 150 == 0 then FastWait() end
+                    for k,va in pairs(Known_Names) do
+                        if table.find(Classes,v.ClassName) and v.Parent and v.Parent.Name ~=Services.Players.LocalPlayer.Name and v.Parent.Name ~= "" and not Banned_Names[v.Parent.Name] and Known_Names.HumanoidRootPart[v.Name] and k == "Head" and v.Parent:FindFirstChild(va[k]) then
+                            local one = v.Parent.Head
+                            EspLine(one)
+                        end
+                    end
+                end
+            end)
+            Services.Workspace.DescendantAdded:Connect(function(v)
+                wait()
+                for k,va in pairs(Known_Names) do
+                    if table.find(Classes,v.ClassName) and v.Parent and v.Parent.Name ~=Services.Players.LocalPlayer.Name and v.Parent.Name ~= "" and not Banned_Names[v.Parent.Name] and Known_Names.HumanoidRootPart[v.Name] and k == "Head" and v.Parent:FindFirstChild(va[k]) then
+                        local one = v.Parent.Head
+                        EspLine(one)
+                    end
+                end
+            end)
+        elseif Type == "Boxes" then
+            spawn(function()
+                for i,v in next,Services.Workspace:GetDescendants() do
+                    if i % 150 == 0 then FastWait() end
+                    for k,va in pairs(Known_Names) do
+                        if table.find(Classes,v.ClassName) and v.Parent and v.Parent.Name ~=Services.Players.LocalPlayer.Name and v.Parent.Name ~= "" and not Banned_Names[v.Parent.Name] and Known_Names.HumanoidRootPart[v.Name] and k == "Head" and v.Parent:FindFirstChild(va[k]) then
+                            local one = v.Parent.Head --Head
+                            local two = v --RootPart
+                            EspBox(one,two)
+                        end
+                    end
+                end
+            end)
+            Services.Workspace.DescendantAdded:Connect(function(v)
+                wait()
+                for k,va in pairs(Known_Names) do
+                    if table.find(Classes,v.ClassName) and v.Parent and v.Parent.Name ~=Services.Players.LocalPlayer.Name and v.Parent.Name ~= "" and not Banned_Names[v.Parent.Name] and Known_Names.HumanoidRootPart[v.Name] and k == "Head" and v.Parent:FindFirstChild(va[k]) then
+                        local one = v.Parent.Head
+                        local two = v
+                        EspBox(one,two)
+                    end
+                end
+            end)
+        end
+    end
+    
+    espsettings:Button("ALL",function()
+        UpdateEsp("Text")
+        UpdateEsp("Lines")
+        UpdateEsp("Boxes")
+    end)
+    
+    espsettings:Button("Tracers",function()
+         UpdateEsp("Lines")
+    end)
+    
+    espsettings:Button("Boxes",function()
+        UpdateEsp("Boxes")
+    end)
+    
+    espsettings:Button("Names",function()
+        UpdateEsp("Text")
+    end)
+    
+    local Old = Get_Closest_Head()
+    getgenv().Updatee = function()
+        if hitp == "Head" then
+            Old = Get_Closest_Head()
+        else
+        	Old = Get_Closest_Root()
+        end
+    end
+    
+    getgenv().Update = function()
+        if Get_Closest_Head() == Services.Players.LocalPlayer then
+        	Updatee()
+        else
+        	Updatee()
+      	end
+        if Get_Closest_Root() == Services.Players.LocalPlayer then
+        	Updatee()
+        else
+        	Updatee()
+      	end
+    end
+    
+    UserInputService.InputBegan:Connect(function(Input)
+        if Input.UserInputType == Enum.UserInputType.MouseButton2 then
+        if aimbotkey == "Right Mouse" then
+            getgenv().aimboton = true
+            Update()
+        end
+        end
+    end)
+    
+    UserInputService.InputEnded:Connect(function(Input)
+        if Input.UserInputType == Enum.UserInputType.MouseButton2 then
+        if aimbotkey == "Right Mouse" then
+            getgenv().aimboton = false
+        end
+        end
+    end)
+    
+    UserInputService.InputBegan:Connect(function(Input)
+        if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+            if aimbotkey == "Left Mouse" then
+                getgenv().aimboton = true
+                Update()
+            end
+        end
+    end)
+    
+    UserInputService.InputEnded:Connect(function(Input)
+        if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+            if aimbotkey == "Left Mouse" then
+                getgenv().aimboton = false
+            end
+        end
+    end)
+    
+    spawn(function()
+        local turning = false;
+      	spawn(function()
+          	while wait(.06) do
+                if Get_Closest_Root() ~= Services.Players.LocalPlayer and Get_Closest_Head() ~= Services.Players.LocalPlayer and Old and Old.Parent and Old ~= Services.Players.LocalPlayer and #(Services.Workspace.CurrentCamera:GetPartsObscuringTarget({Old.Position},{Old.Parent})) == 0 then
+                    turning = true;
+                else
+                    turning = false;
+                end
+            end
+        end)
+        game:GetService("RunService").Stepped:Connect(function()
+            spawn(function()
+                if EspDistance == nil then
+                    EspDistance = math.random(1200)
+                end
+            end)
+            Update()
+            if ButtonOn == true and Get_Closest_Root() ~= Services.Players.LocalPlayer and Get_Closest_Head() ~= Services.Players.LocalPlayer and Old and Old.Parent and Old ~= Services.Players.LocalPlayer then
+                if getgenv().aimboton == true and (checkkFar and Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) <= EspDistance or checkkFar == false) then
+                    local g, onscreen = Services.Workspace.CurrentCamera:WorldToScreenPoint(Old.Position)
+                    if KnifeAim == true then
+                        local aimsss;
+                        local Head =  Old
+                        local Velocityx = Head.Velocity.X
+                        local Velocityy = Head.Velocity.Y
+                        local Velocityz = Head.Velocity.Z
+                        if Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) <= 20 then
+                        aimsss =
+                            Head.Position +
+                            Vector3.new(
+                            (Velocityx >= 1 and 1) or (Velocityx <= -1 and -1) or 0,
+                            (Velocityy >= 1 and 1) or (Velocityy <= -1 and -1) or 0,
+                            (Velocityz >= 1 and 1) or (Velocityz <= -1 and -1) or 0
+                            )
+                        elseif Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) >= 20 then
+                        aimsss =
+                            Head.Position +
+                            Vector3.new(
+                            (Velocityx >= 2.5 and 2.5) or (Velocityx <= -2.5 and -2.5) or 0,
+                            (Velocityy >= 2.5 and 2.5) or (Velocityy <= -2.5 and -2.5) or 0,
+                            (Velocityz >= 2.5 and 2.5) or (Velocityz <= -2.5 and -2.5) or 0
+                            )
+                        elseif Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) <= 40 then
+                        aimsss =
+                            Head.Position +
+                            Vector3.new(
+                            (Velocityx >= 3 and 3) or (Velocityx <= -3 and -3) or 0,
+                            (Velocityy >= 3 and 3) or (Velocityy <= -3 and -3) or 0,
+                            (Velocityz >= 3 and 3) or (Velocityz <= -3 and -3) or 0
+                            )
+                        elseif Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) >= 40 then
+                        aimsss =
+                            Head.Position +
+                            Vector3.new(
+                            (Velocityx >= 3.5 and 3.5) or (Velocityx <= -3.5 and -3.5) or 0,
+                            (Velocityy >= 3.5 and 3.5) or (Velocityy <= -3.5 and -3.5) or 0,
+                            (Velocityz >= 3.5 and 3.5) or (Velocityz <= -3.5 and -3.5) or 0
+                            )
+                        elseif Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) <= 60 then
+                        aimsss =
+                            Head.Position +
+                            Vector3.new(
+                            (Velocityx >= 4 and 4) or (Velocityx <= -4 and -4) or 4,
+                            (Velocityy >= 4 and 4) or (Velocityy <= -4 and -4) or 4,
+                            (Velocityz >= 4 and 4) or (Velocityz <= -4 and -4) or 4
+                            )
+                        elseif Services.Players.LocalPlayer:DistanceFromCharacter( Old.Position) >= 60 then
+                        aimsss =
+                            Head.Position +
+                            Vector3.new(
+                            (Velocityx >= 4.5 and 4.5) or (Velocityx <= -4.5 and -4.5) or 0,
+                            (Velocityy >= 4.5 and 4.5) or (Velocityy <= -4.5 and -4.5) or 0,
+                            (Velocityz >= 4.5 and 4.5) or (Velocityz <= -4.5 and -4.5) or 0
+                            )
+                        elseif Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) <= 80 then
+                        aimsss =
+                            Head.Position +
+                            Vector3.new(
+                            (Velocityx >= 5 and 5) or (Velocityx <= -5 and -5) or 0,
+                            (Velocityy >= 5 and 5) or (Velocityy <= -5 and -5) or 0,
+                            (Velocityz >= 5 and 5) or (Velocityz <= -5 and -5) or 0
+                            )
+                        elseif Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) >= 80 then
+                            aimsss =
+                            Head.Position +
+                            Vector3.new(
+                            (Velocityx >= 5.5 and 5.5) or (Velocityx <= -5.5 and -5.5) or 0,
+                            (Velocityy >= 5.5 and 5.5) or (Velocityy <= -5.5 and -5.5) or 0,
+                            (Velocityz >= 5.5 and 5.5) or (Velocityz <= -5.5 and -5.5) or 0
+                            )
+                        end
+                        pcall(function() if onscreen and Old and (TeamCheck and (NotTeam(Old.Parent.Name) and NotTeam(Old.Parent.Parent.Name)) or not TeamCheck) and (Esplockvis and Old and turning == true or not Esplockvis) then
+                            return mousemoverel(Services.Workspace.CurrentCamera:WorldToScreenPoint(aimsss).X - Services.Workspace.CurrentCamera:WorldToScreenPoint(mouse.Hit.p).X + aimbotxpos,Services.Workspace.CurrentCamera:WorldToScreenPoint(aimsss).Y - Services.Workspace.CurrentCamera:WorldToScreenPoint(mouse.Hit.p).Y + aimbotypos)
+                        end end)
+                    else
+                        aimsss = Old.Position;
+                        pcall(function() if onscreen and Old and (TeamCheck and (NotTeam(Old.Parent.Name) and NotTeam(Old.Parent.Parent.Name)) or not TeamCheck) and (Esplockvis and Old and turning == true or not Esplockvis) then
+                            return mousemoverel(Services.Workspace.CurrentCamera:WorldToScreenPoint(aimsss).X - Services.Workspace.CurrentCamera:WorldToScreenPoint(mouse.Hit.p).X + aimbotxpos,Services.Workspace.CurrentCamera:WorldToScreenPoint(aimsss).Y - Services.Workspace.CurrentCamera:WorldToScreenPoint(mouse.Hit.p).Y + aimbotypos)
+                        end end)
+                    end
+                end
+            end
+        end)
+    end)
+    
+    spawn(function()
+        repeat
+            wait()
+        until allesp
+        UpdateEsp("Text")
+        UpdateEsp("Lines")
+        UpdateEsp("Boxes")
+        local LineEsp = false;
+        local BoxEsp = false;
+        local TextEsp = false;
+    end)
+    
+    function LoadAssassinSettings()
+        TextEsp = Show_Text_Esp_Toggle or false;
+        BoxEsp = Show_Boxes_Esp_Toggle or false;
+        LineEsp = Show_Lines_Esp_Toggle or false;
+        allesp = Show_All_Esp_Toggle or false;
+        aimbotkey = Aim_Key or "Right Mouse"
+        KnifeAim = Knife_Style_Locking_Toggle or false;
+        showfovaimbot = Show_Show_Fov_When_Active_Toggle or false;
+        Esplockvis = Visibility_Check  or false;
+        hitp = Aim_At or "Head";
+        MAXDISTANCE = Circle_Fov_Size or 250;
+    end
+    
+    if game.CreatorId == 113657341 then
+        LoadAssassinSettings()
+    end
 end
 
 local a=Instance.new("ScreenGui")local b=Instance.new("ImageLabel")local c=Instance.new("TextLabel")local d=Instance.new("TextButton")local e=Instance.new("ImageLabel")local f=Instance.new("TextButton")local g=Instance.new("ImageLabel")local h=Instance.new("ImageLabel")local i=Instance.new("TextButton")local j=Instance.new("ImageLabel")local k=Instance.new("ImageLabel")a.Parent=game:GetService("CoreGui")b.Name="Frame"b.Parent=a;b.BackgroundColor3=Color3.fromRGB(255,255,255)b.BackgroundTransparency=1.000;b.Position=UDim2.new(0.419780254,0,0.294919431,0)b.Size=UDim2.new(0,317,0,158)b.Image="rbxassetid://3570695787"b.ImageColor3=Color3.fromRGB(0,0,0)b.ImageTransparency=0.400;b.ScaleType=Enum.ScaleType.Slice;b.SliceCenter=Rect.new(100,100,100,100)b.SliceScale=0.060;b.Active=true;b.Draggable=true;c.Parent=b;c.BackgroundColor3=Color3.fromRGB(255,255,255)c.BackgroundTransparency=1.000;c.Size=UDim2.new(0,317,0,118)c.Visible=true;c.Font=Enum.Font.SourceSans;c.Text="Welcome Lovely User, I Updated My Shit So You Can Enjoy Exploiting Again, Please Note That --AI-- Is Broken And I'm Planning To Fix it, But I Also Added The Option For Draxware"c.TextColor3=Color3.fromRGB(255,255,255)c.TextScaled=true;c.TextSize=14.000;c.TextWrapped=true;d.Name="Okay"d.Parent=b;d.BackgroundColor3=Color3.fromRGB(0,0,0)d.BackgroundTransparency=0.150;d.BorderColor3=Color3.fromRGB(255,255,255)d.BorderSizePixel=0;d.Position=UDim2.new(0.264999986,0,0.75999999,0)d.Size=UDim2.new(0,135,0,30)d.Visible=true;d.ZIndex=2;d.Font=Enum.Font.SourceSans;d.Text="Okay"d.TextColor3=Color3.fromRGB(255,255,255)d.TextScaled=true;d.TextSize=14.000;d.TextWrapped=true;e.Name="Roundify"e.Parent=d;e.AnchorPoint=Vector2.new(0.5,0.5)e.BackgroundColor3=Color3.fromRGB(255,255,255)e.BackgroundTransparency=1.000;e.Position=UDim2.new(0.5,0,0.5,0)e.Size=UDim2.new(1,12,1,12)e.Image="rbxassetid://3570695787"e.ImageColor3=Color3.fromRGB(0,0,0)e.ImageTransparency=0.150;e.ScaleType=Enum.ScaleType.Slice;e.SliceCenter=Rect.new(100,100,100,100)e.SliceScale=0.060;f.Name="DraxWare"f.Parent=b;f.BackgroundColor3=Color3.fromRGB(0,0,0)f.BackgroundTransparency=1.000;f.BorderColor3=Color3.fromRGB(255,255,255)f.BorderSizePixel=0;f.Position=UDim2.new(0.0252365991,0,0.0632911474,0)f.Size=UDim2.new(0,200,0,50)f.ZIndex=5;f.Font=Enum.Font.SourceSans;f.Text="Drax Ware"f.TextColor3=Color3.fromRGB(255,255,255)f.TextScaled=true;f.TextSize=14.000;f.TextWrapped=true;g.Name="Roundify"g.Parent=f;g.AnchorPoint=Vector2.new(0.5,0.5)g.BackgroundColor3=Color3.fromRGB(255,255,255)g.BackgroundTransparency=1.000;g.Position=UDim2.new(0.5,0,0.5,0)g.Size=UDim2.new(0.959999979,8,0.839999974,8)g.ZIndex=3;g.Image="rbxassetid://3570695787"g.ImageColor3=Color3.fromRGB(0,0,0)g.ScaleType=Enum.ScaleType.Slice;g.SliceCenter=Rect.new(100,100,100,100)g.SliceScale=0.040;h.Name="Roundify1"h.Parent=f;h.AnchorPoint=Vector2.new(0.5,0.5)h.BackgroundColor3=Color3.fromRGB(255,255,255)h.Position=UDim2.new(0.5,0,0.5,0)h.Size=UDim2.new(1,2,1,2)h.Image="rbxassetid://3570695787"h.ImageTransparency=1.000;h.ScaleType=Enum.ScaleType.Slice;h.SliceCenter=Rect.new(100,100,100,100)h.SliceScale=0.060;i.Name="Ai"i.Parent=b;i.BackgroundColor3=Color3.fromRGB(0,0,0)i.BackgroundTransparency=1.000;i.BorderColor3=Color3.fromRGB(255,255,255)i.BorderSizePixel=0;i.Position=UDim2.new(0.324921161,0,0.626582265,0)i.Size=UDim2.new(0,200,0,50)i.ZIndex=5;i.Font=Enum.Font.SourceSans;i.Text="Ai Assist"i.TextColor3=Color3.fromRGB(255,255,255)i.TextScaled=true;i.TextSize=14.000;i.TextWrapped=true;j.Name="Roundify"j.Parent=i;j.AnchorPoint=Vector2.new(0.5,0.5)j.BackgroundColor3=Color3.fromRGB(255,255,255)j.BackgroundTransparency=1.000;j.Position=UDim2.new(0.5,0,0.5,0)j.Size=UDim2.new(0.959999979,8,0.839999974,8)j.ZIndex=3;j.Image="rbxassetid://3570695787"j.ImageColor3=Color3.fromRGB(0,0,0)j.ScaleType=Enum.ScaleType.Slice;j.SliceCenter=Rect.new(100,100,100,100)j.SliceScale=0.040;k.Name="Roundify1"k.Parent=i;k.AnchorPoint=Vector2.new(0.5,0.5)k.BackgroundColor3=Color3.fromRGB(255,255,255)k.Position=UDim2.new(0.5,0,0.5,0)k.Size=UDim2.new(1,2,1,2)k.Image="rbxassetid://3570695787"k.ImageTransparency=1.000;k.ScaleType=Enum.ScaleType.Slice;k.SliceCenter=Rect.new(100,100,100,100)k.SliceScale=0.060;for l,m in next,f:GetDescendants()do m.Visible=false;m.Active=false;m.Parent.Visible=false;m.Parent.Active=false end;for l,m in next,i:GetDescendants()do m.Visible=false;m.Active=false;m.Parent.Visible=false;m.Parent.Active=false end;for l,m in next,d:GetDescendants()do m.Visible=false;m.Active=false;m.Parent.Visible=false;m.Parent.Active=false end;spawn(function()while true do pcall(function()h.BackgroundColor3=Color3.fromHSV(tick()%5/5,1,1)k.BackgroundColor3=Color3.fromHSV(tick()%5/5,1,1)end)wait()end end)wait(5)for l,m in next,d:GetDescendants()do m.Visible=true;m.Active=true;m.Parent.Visible=true;m.Parent.Active=true end;d.MouseButton1Down:Connect(function()c:Destroy()for l,m in next,d:GetDescendants()do m:Destroy()d:Destroy()end;for l,m in next,f:GetDescendants()do m.Visible=true;m.Active=true;f.Visible=true;f.Active=true end;for l,m in next,i:GetDescendants()do m.Visible=true;m.Active=true;i.Visible=true;i.Active=true end;for l,m in next,d:GetDescendants()do m.Visible=true;m.Active=true;d.Visible=true;d.Active=true end end)i.MouseButton1Down:Connect(function()a:Destroy()return theGui()end)f.MouseButton1Down:Connect(function()a:Destroy()return ttheGui()end)
