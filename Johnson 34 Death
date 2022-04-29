@@ -3261,8 +3261,7 @@ function ttheGui()
       Circle.NumSides = 10000
       Circle.Radius = MAXDISTANCE
       Circle.Filled = false
-      while true do
-      	wait(0.01)
+      game:GetService("RunService").Heartbeat:Connect(function()
         if ButtonOn == true and showfovaimbot == true then
           pcall(function()
             Circle.Position = Vector2.new(mouse.X, mouse.Y)
@@ -3277,7 +3276,7 @@ function ttheGui()
             Circle.Visible = false
           end)
         end
-      end --)
+      end)
     end)
     
     local AimbotToggleBindt = "e"
