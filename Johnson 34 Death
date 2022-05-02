@@ -3253,30 +3253,42 @@ function ttheGui()
     end
     
     spawn(function()
-      local Circle = Drawing.new("Circle")
-      Circle.Visible = false
-      Circle.Position = Vector2.new(mouse.X, mouse.Y)
-      Circle.Color = Color3.fromRGB(220, 53, 53)
-      Circle.Thickness = 0.1
-      Circle.NumSides = 10000
-      Circle.Radius = MAXDISTANCE
-      Circle.Filled = false
-      game:GetService("RunService").Heartbeat:Connect(function()
-        if ButtonOn == true and showfovaimbot == true then
-          pcall(function()
-            Circle.Position = Vector2.new(mouse.X, mouse.Y)
-            Circle.Radius = MAXDISTANCE
-            Circle.Color = CircLeCol
-            Circle.Visible = true
-          end)
-        else
-          pcall(function()
-            Circle.Position = Vector2.new(mouse.X, mouse.Y)
-            Circle.Radius = MAXDISTANCE
-            Circle.Visible = false
-          end)
-        end
-      end)
+        local Circle = Drawing.new("Circle")
+        Circle.Visible = false
+        Circle.Position = Vector2.new(mouse.X, mouse.Y)
+        Circle.Color = Color3.fromRGB(220, 53, 53)
+        Circle.Thickness = 0.001
+        Circle.NumSides = 0
+        Circle.Radius = MAXDISTANCE
+        Circle.Filled = false
+        Circle.Transparency = 0.25
+        Rotating = 5
+        spawn(function()
+            while wait() do
+                if Rotating == 5 then 
+                    for i= 1,30 do wait() Rotating = Rotating + 1 end
+                elseif Rotating == 35 then 
+                    for i= 1,30 do wait() Rotating = Rotating - 1 end
+                end
+            end
+        end)
+        game:GetService("RunService").Heartbeat:Connect(function()
+            if ButtonOn == true and showfovaimbot == true then
+                pcall(function()
+                    Circle.NumSides = Rotating
+                    Circle.Position = Vector2.new(mouse.X, mouse.Y)
+                    Circle.Radius = MAXDISTANCE
+                    Circle.Color = Color3.fromHSV(tick() % 5 / 5,1,1)
+                    Circle.Visible = true
+                end)
+            else
+                pcall(function()
+                    Circle.Position = Vector2.new(mouse.X, mouse.Y)
+                    Circle.Radius = MAXDISTANCE
+                    Circle.Visible = false
+                end)
+            end
+        end)
     end)
     
     local AimbotToggleBindt = "e"
