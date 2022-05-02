@@ -3261,17 +3261,8 @@ function ttheGui()
         Circle.NumSides = 0
         Circle.Radius = MAXDISTANCE
         Circle.Filled = false
-        Circle.Transparency = 0.25
-        Rotating = 5
-        spawn(function()
-            while wait() do
-                if Rotating == 5 then 
-                    for i= 1,30 do wait() Rotating = Rotating + 1 end
-                elseif Rotating == 35 then 
-                    for i= 1,30 do wait() Rotating = Rotating - 1 end
-                end
-            end
-        end)
+        Circle.Transparency = 0.50
+        Rotating = 50000
         game:GetService("RunService").Heartbeat:Connect(function()
             if ButtonOn == true and showfovaimbot == true then
                 pcall(function()
@@ -3308,89 +3299,8 @@ function ttheGui()
         end
     end)
     
-    local hasProperty = function(object, prop)
-        local t = object[prop]
-    end
-    
-    local Render_Yes = function()
-        settings().Rendering.QualityLevel = "Level01"
-        for i,v in pairs(game:GetDescendants()) do
-        local success = pcall(function() hasProperty(v, "Material") end)
-        if success and v.Name ~= "HumanoidRootPart" then
-            v.Material = "Plastic"
-        end
-        end
-        game:GetService("Workspace").DescendantAdded:Connect(function(v)
-        wait()
-        local success = pcall(function() hasProperty(v, "Material") end)
-        if success and v.Name ~= "HumanoidRootPart" then
-            v.Material = "Plastic"
-        end
-        end)
-    end
-    
-    local FpsBoost = function()
-        Render_Yes()
-    end
-    
-    fpsboost:Button("Boost! (face kill)",function()
-        FpsBoost()
-    end)
-    
-    fpsboost:Button("Boost! (no face kill)",function()
-        local Render_Yes = function()
-        for i,v in pairs(game:GetDescendants()) do
-            
-            if v.ClassName == ("Decal") and v.Name ~= "face" then
-                v:Destroy()
-            end 
-            if v.ClassName == ("Texture") then
-                v:Destroy()
-            end
-            if v.ClassName == ("ParticleEmitter") or v.ClassName == ("Trail") then
-                v.Lifetime = NumberRange.new(0)
-            end
-            if v.ClassName == ("Explosion") then
-                v.BlastPressure = 1
-                v.BlastRadius = 1
-            end
-            if v.ClassName == ("Fire") or v.ClassName == ("SpotLight") or v.ClassName == ("Smoke") or v.ClassName == ("Sparkles") then
-                v.Enabled = false
-            end
-            if v.ClassName == ("BlurEffect") or v.ClassName == ("SunRaysEffect") or v.ClassName == ("ColorCorrectionEffect") or v.ClassName == ("BloomEffect") or v.ClassName == ("DepthOfFieldEffect") then
-                v.Enabled = false
-            end
-        end
-        game.DescendantAdded:Connect(function(v)
-            wait()
-            if v.ClassName == ("Decal") and v.Name ~= "face" then
-                v:Destroy()
-            end 
-            if v.ClassName == ("Texture") then
-                v:Destroy()
-            end
-            if v.ClassName == ("ParticleEmitter") or v.ClassName == ("Trail") then
-                v.Lifetime = NumberRange.new(0)
-            end
-            if v.ClassName == ("Explosion") then
-                v.BlastPressure = 1
-                v.BlastRadius = 1
-            end
-            if v.ClassName == ("Fire") or v.ClassName == ("SpotLight") or v.ClassName == ("Smoke") or v.ClassName == ("Sparkles") then
-                v.Enabled = false
-            end
-            if v.ClassName == ("BlurEffect") or v.ClassName == ("SunRaysEffect") or v.ClassName == ("ColorCorrectionEffect") or v.ClassName == ("BloomEffect") or v.ClassName == ("DepthOfFieldEffect") then
-                v.Enabled = false
-            end
-        end)
-        end
-        settings().Rendering.QualityLevel = "Level01"
-        sethiddenproperty(game.Lighting,"Technology",2)
-        sethiddenproperty(game.Workspace.Terrain,"Decoration",false)
-        game.Lighting.GlobalShadows = false
-        game.Lighting.FogEnd = 9e9
-        game.Lighting.Brightness = 0
-        Render_Yes()
+    fpsboost:Button("Fps Boost, Implemented",function()
+        spawn(function()for a,b in pairs(game:GetService("Workspace"):GetDescendants())do if b:IsA("Texture")or b:IsA("Decal")then if string.lower(b.Name)~="face"then b:Destroy()end end;if b:IsA("Part")or b:IsA("Union")or b:IsA("CornerWedgePart")or b:IsA("TrussPart")then b.Reflectance=0 elseif b:IsA("ParticleEmitter")or b:IsA("Trail")then b.Lifetime=NumberRange.new(0)elseif b:IsA("Fire")or b:IsA("SpotLight")or b:IsA("Smoke")or b:IsA("Sparkles")then b.Enabled=false end end;game:GetService("Workspace").DescendantAdded:Connect(function(b)wait()if b:IsA("Texture")or b:IsA("Decal")then if string.lower(b.Name)~="face"then b:Destroy()end end;if b:IsA("Part")or b:IsA("Union")or b:IsA("CornerWedgePart")or b:IsA("TrussPart")then b.Reflectance=0 elseif b:IsA("ParticleEmitter")or b:IsA("Trail")then b.Lifetime=NumberRange.new(0)elseif b:IsA("Fire")or b:IsA("SpotLight")or b:IsA("Smoke")or b:IsA("Sparkles")then b.Enabled=false end end)Services.Lighting.GlobalShadows=false;Services.Lighting.FogEnd=9e9;settings().Rendering.QualityLevel="Level01"end)
     end)
     
     aimbot:Dropdown("Aim At",{"Head", "HumanoidRootPart"},true,function(okk)
