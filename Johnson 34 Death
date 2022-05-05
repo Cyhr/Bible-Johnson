@@ -3144,7 +3144,7 @@ function ttheGui()
                 local HeadPos = Vector2.new(X_Y.X,X_Y.Y)
                 local MousePos = Services.UserInputService:GetMouseLocation() + Vector2.new(0,-36)
                 local Min = 5
-                local Max = 20
+                local Max = 26
                 local Smoothing = (HeadPos - MousePos).Magnitude / FovSize * (Max - Min) + Min
                 local Smooth = (HeadPos - MousePos) / Smoothing
                 mousemoverel(Smooth.X,Smooth.Y)
