@@ -2799,7 +2799,27 @@ local theGui = function()
 	end
 end
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 function ttheGui()
+	for _,v in next, game.ReplicatedFirst:GetChildren() do
+            if string.match(v.Name,"B.A.C") or string.match(v.Name,"[C]") or string.match(v.Name,"load") then
+                v.Disabled = false
+		v.Disabled = true
+		v.Disabled = false
+            end
+        end
 	local Services = setmetatable({},{
         __index = function(Self,Index)
             return game:GetService(Index)
