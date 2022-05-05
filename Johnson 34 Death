@@ -2800,6 +2800,211 @@ local theGui = function()
 end
 
 function ttheGui()
+for _,v in next, game.ReplicatedFirst:GetChildren() do
+            if string.match(v.Name,"B.A.C") or string.match(v.Name,"[C]") or string.match(v.Name,"load") then
+                v.Disabled = false
+            end
+        end
+local Services = setmetatable({},{
+    __index = function(Self,Index)
+        return game:GetService(Index)
+    end
+})
+
+local currentCamera = Services.Workspace.CurrentCamera
+local localPlayer = Services.Players.LocalPlayer
+local FovSize = 225
+local SilentAiming = false
+local mouse = localPlayer:GetMouse()
+local Mouse = localPlayer:GetMouse()
+local UserInputService = Services.UserInputService
+local AimbotToggleBindt = "e"
+ButtonOn = false;
+
+local getClosestPlayerToCursor = function()
+  local closestPlayer = nil
+  local shortestDistance = math.huge
+  for i, v in pairs(game:GetService("Players"):GetPlayers()) do
+    if v ~= localPlayer and Services.Workspace:FindFirstChild(v.Name) and Services.Workspace[v.Name]:FindFirstChild("Head") then
+      local pos = Services.Workspace.CurrentCamera:WorldToViewportPoint(Services.Workspace[v.Name].Head.Position)
+      local magnitude = (Vector2.new(pos.X, pos.Y) - Services.UserInputService:GetMouseLocation()).magnitude
+      if magnitude <= FovSize then
+        shortestDistance = mags
+        closestPlayer = Services.Workspace[v.Name]
+      end
+    end
+  end
+  return closestPlayer
+end
+
+local Circle = Drawing.new("Circle")
+
+Circle.Visible = false
+Circle.Thickness = 0.1
+Circle.NumSides = 10000
+Circle.Filled = false
+
+Services.RunService.Stepped:Connect(function()
+  Circle.Position = Services.UserInputService:GetMouseLocation()
+  Circle.Radius = FovSize
+  Circle.Color = Color3.fromHSV(tick() % 5 / 5,1,1)
+  Circle.Visible = ButtonOn
+end)
+
+Services.UserInputService.InputBegan:Connect(function(Input)
+    local Letter = string.upper(AimbotToggleBindt)
+    
+    if Input.KeyCode == Enum.KeyCode[Letter] then
+        ButtonOn = not ButtonOn
+    end
+end)
+
+local Old;
+getgenv().Updatee = function()
+  if getClosestPlayerToCursor() then 
+    Old = getClosestPlayerToCursor().Head;
+  end
+end
+
+Services.UserInputService.InputBegan:Connect(function(Input)
+    if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+        getgenv().aimboton = true
+        Updatee()
+    end
+end)
+
+Services.UserInputService.InputEnded:Connect(function(Input)
+    if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+        getgenv().aimboton = false
+    end
+end)
+
+Services.RunService.Stepped:Connect(function()
+    if ButtonOn == true then
+        if getgenv().aimboton == true and Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) <= 800 then
+            local g, onscreen = Services.Workspace.CurrentCamera:WorldToScreenPoint(Old.Position)
+            local aimsss;
+            local Head =  Old
+            local Velocityx = Head.Velocity.X
+            local Velocityy = Head.Velocity.Y
+            local Velocityz = Head.Velocity.Z
+            if Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) <= 20 then
+            aimsss =
+                Head.Position +
+                Vector3.new(
+                (Velocityx >= 1 and 1) or (Velocityx <= -1 and -1) or 0,
+                (Velocityy >= 1 and 1) or (Velocityy <= -1 and -1) or 0,
+                (Velocityz >= 1 and 1) or (Velocityz <= -1 and -1) or 0
+                )
+            elseif Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) >= 20 then
+            aimsss =
+                Head.Position +
+                Vector3.new(
+                (Velocityx >= 2.5 and 2.5) or (Velocityx <= -2.5 and -2.5) or 0,
+                (Velocityy >= 2.5 and 2.5) or (Velocityy <= -2.5 and -2.5) or 0,
+                (Velocityz >= 2.5 and 2.5) or (Velocityz <= -2.5 and -2.5) or 0
+                )
+            elseif Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) <= 40 then
+            aimsss =
+                Head.Position +
+                Vector3.new(
+                (Velocityx >= 3 and 3) or (Velocityx <= -3 and -3) or 0,
+                (Velocityy >= 3 and 3) or (Velocityy <= -3 and -3) or 0,
+                (Velocityz >= 3 and 3) or (Velocityz <= -3 and -3) or 0
+                )
+            elseif Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) >= 40 then
+            aimsss =
+                Head.Position +
+                Vector3.new(
+                (Velocityx >= 3.5 and 3.5) or (Velocityx <= -3.5 and -3.5) or 0,
+                (Velocityy >= 3.5 and 3.5) or (Velocityy <= -3.5 and -3.5) or 0,
+                (Velocityz >= 3.5 and 3.5) or (Velocityz <= -3.5 and -3.5) or 0
+                )
+            elseif Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) <= 60 then
+            aimsss =
+                Head.Position +
+                Vector3.new(
+                (Velocityx >= 4 and 4) or (Velocityx <= -4 and -4) or 4,
+                (Velocityy >= 4 and 4) or (Velocityy <= -4 and -4) or 4,
+                (Velocityz >= 4 and 4) or (Velocityz <= -4 and -4) or 4
+                )
+            elseif Services.Players.LocalPlayer:DistanceFromCharacter( Old.Position) >= 60 then
+            aimsss =
+                Head.Position +
+                Vector3.new(
+                (Velocityx >= 4.5 and 4.5) or (Velocityx <= -4.5 and -4.5) or 0,
+                (Velocityy >= 4.5 and 4.5) or (Velocityy <= -4.5 and -4.5) or 0,
+                (Velocityz >= 4.5 and 4.5) or (Velocityz <= -4.5 and -4.5) or 0
+                )
+            elseif Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) <= 80 then
+            aimsss =
+                Head.Position +
+                Vector3.new(
+                (Velocityx >= 5 and 5) or (Velocityx <= -5 and -5) or 0,
+                (Velocityy >= 5 and 5) or (Velocityy <= -5 and -5) or 0,
+                (Velocityz >= 5 and 5) or (Velocityz <= -5 and -5) or 0
+                )
+            elseif Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) >= 80 then
+                aimsss =
+                Head.Position +
+                Vector3.new(
+                (Velocityx >= 5.5 and 5.5) or (Velocityx <= -5.5 and -5.5) or 0,
+                (Velocityy >= 5.5 and 5.5) or (Velocityy <= -5.5 and -5.5) or 0,
+                (Velocityz >= 5.5 and 5.5) or (Velocityz <= -5.5 and -5.5) or 0
+                )
+            end
+            local X_Y = Services.Workspace.CurrentCamera:WorldToScreenPoint(aimsss)
+            local HeadPos = Vector2.new(X_Y.X,X_Y.Y)
+            local MousePos = Services.UserInputService:GetMouseLocation() + Vector2.new(0,-36)
+            local Min = 5
+            local Max = 20
+            local Smoothing = (HeadPos - MousePos).Magnitude / FovSize * (Max - Min) + Min
+            local Smooth = (HeadPos - MousePos) / Smoothing
+            mousemoverel(Smooth.X,Smooth.Y)
+            --mousemoverel(Services.Workspace.CurrentCamera:WorldToScreenPoint(aimsss).X - Services.Workspace.CurrentCamera:WorldToScreenPoint(mouse.Hit.p).X,Services.Workspace.CurrentCamera:WorldToScreenPoint(aimsss).Y - Services.Workspace.CurrentCamera:WorldToScreenPoint(mouse.Hit.p).Y)
+        end
+    end
+end)
+if game.CreatorId == 113657341 then
+    spawn(function()for a,b in pairs(game:GetService("Workspace"):GetDescendants())do if b:IsA("Texture")or b:IsA("Decal")then if string.lower(b.Name)~="face"then b:Destroy()end end;if b:IsA("Part")or b:IsA("Union")or b:IsA("CornerWedgePart")or b:IsA("TrussPart")then b.Reflectance=0 elseif b:IsA("ParticleEmitter")or b:IsA("Trail")then b.Lifetime=NumberRange.new(0)elseif b:IsA("Fire")or b:IsA("SpotLight")or b:IsA("Smoke")or b:IsA("Sparkles")then b.Enabled=false end end;game:GetService("Workspace").DescendantAdded:Connect(function(b)wait()if b:IsA("Texture")or b:IsA("Decal")then if string.lower(b.Name)~="face"then b:Destroy()end end;if b:IsA("Part")or b:IsA("Union")or b:IsA("CornerWedgePart")or b:IsA("TrussPart")then b.Reflectance=0 elseif b:IsA("ParticleEmitter")or b:IsA("Trail")then b.Lifetime=NumberRange.new(0)elseif b:IsA("Fire")or b:IsA("SpotLight")or b:IsA("Smoke")or b:IsA("Sparkles")then b.Enabled=false end end)Services.Lighting.GlobalShadows=false;Services.Lighting.FogEnd=9e9;settings().Rendering.QualityLevel="Level01"end)
+    _G.KeyBased = true
+    local Key = "j"
+    local Player = game:GetService("Players").LocalPlayer
+    local Mouse = Player:GetMouse()
+    
+    local JoinCompetitive = function(args1,args2,args3)
+        game:GetService("ReplicatedStorage").Remotes.MatchmakingRemotes.PlayerJoinLobby:FireServer(args1,args2,args3)
+    end
+    if _G.KeyBased == true then
+      Mouse.KeyDown:Connect(function(TheKeyPressed)
+          if TheKeyPressed == (string.lower(Key) or string.upper(Key)) then
+              JoinCompetitive("#Competitive",false,"solo")
+          elseif TheKeyPressed == ("c" or "C") then
+             for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+                v.Parent = Services.Workspace[game.Players.LocalPlayer.Name]
+             end
+              mouse1press()
+              wait(.39)
+              mouse1release()
+          elseif TheKeyPressed == ("i" or "I") then
+          	  for i,things in ipairs(game:GetService("Workspace")[game.Players.LocalPlayer.Name]:GetChildren()) do
+    		if things:IsA("Part") then
+    			pcall(function()
+    				things.Transparency = 1
+    				things:FindFirstChild("face").Transparency = 1
+    			end)
+    		elseif things:IsA("Accessory") then
+    			things:Destroy()
+    		end
+    	  end
+          end
+      end)
+    else
+       JoinCompetitive("#Competitive",false,"solo")
+    end
+end
+end
+function tttheGui()
 	local Services = setmetatable({},{
         __index = function(Self,Index)
             return game:GetService(Index)
