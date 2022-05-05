@@ -3072,7 +3072,8 @@ function ttheGui()
         Text.Thickness = 0.01
         Text.NumSides = 10000
         Text.Filled = true
-        Text.Radius = 5
+        Text.Radius = 4
+    	Text.Transparency = .80
         local txtname = Part.Parent.Name;
       	if txtname == "Body" then
         	txtname = Part.Parent.Parent.Name;
