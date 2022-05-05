@@ -3068,7 +3068,7 @@ function ttheGui()
     
     Services.RunService.Stepped:Connect(function()
         if ButtonOn == true then
-            if getgenv().aimboton == true and Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) <= 800 then
+            if getgenv().aimboton == true and getClosestPlayerToCursor() ~= Services.Players.LocalPlayer and Old and Old.Parent and Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) <= 800 then
                 local g, onscreen = Services.Workspace.CurrentCamera:WorldToScreenPoint(Old.Position)
                 local aimsss;
                 local Head =  Old
@@ -3191,6 +3191,100 @@ function ttheGui()
         end
     end
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
