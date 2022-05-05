@@ -2800,13 +2800,6 @@ local theGui = function()
 end
 
 function ttheGui()
-	for _,v in next, game.ReplicatedFirst:GetChildren() do
-            if string.match(v.Name,"B.A.C") or string.match(v.Name,"[C]") or string.match(v.Name,"load") then
-                v.Disabled = false
-		v.Disabled = true
-		v.Disabled = false
-            end
-        end
 	local Services = setmetatable({},{
         __index = function(Self,Index)
             return game:GetService(Index)
@@ -2835,10 +2828,18 @@ function ttheGui()
     local Mouse = localPlayer:GetMouse()
     local UserInputService = Services.UserInputService
     local AimbotToggleBindt = "e"
+    local Target;
     ButtonOn = false;
     checkkFar= false;
     local Value = Instance.new("BoolValue")
+    function EspPosition2(Part)
+        local Position = Services.Workspace.CurrentCamera:WorldToViewportPoint(Part.Position + Vector3.new(0,0.5 + Part.Size.Y / 2,0))
     
+        return Vector2.new(Position.X - Part.Size.X / 2,Position.Y - Part.Size.Y / 2)
+    end
+    function WorldToViewportPoint(Position)
+        return Services.Workspace.CurrentCamera:WorldToViewportPoint(Position)
+    end
     function UpdateValue()
         Value.Value = not Value.Value
     end
@@ -3013,6 +3014,24 @@ function ttheGui()
     return part;
     end
     
+    function UpdateTargets()
+    
+    end
+    
+    if game.CreatorId == 113657341 then
+        function UpdateTargets()
+            local TargetText =Services.Players.LocalPlayer:FindFirstChild("TargetText",true)
+            if TargetText then
+                Target = Services.Players:FindFirstChild(TargetText.Text)
+            end
+        end
+    end
+    Services.RunService.RenderStepped:Connect(function()
+        if UpdateTargets then
+            UpdateTargets()
+        end
+    end)
+    
     local Circle = Drawing.new("Circle")
     
     Circle.Visible = false
@@ -3026,6 +3045,46 @@ function ttheGui()
       Circle.Color = Color3.fromHSV(tick() % 5 / 5,1,1)
       Circle.Visible = ButtonOn
     end)
+    
+    function create_small_esp(Part)
+        local Text = Drawing.new("Circle")
+        Text.Visible = false
+        Text.Thickness = 0.01
+        Text.NumSides = 10000
+        Text.Filled = true
+        Text.Radius = 5
+        local txtname = Part.Parent.Name;
+      	if txtname == "Body" then
+        	txtname = Part.Parent.Parent.Name;
+      	end
+        local Connection
+        Connection =
+            Services.RunService.RenderStepped:Connect(
+            function()
+                if Part:IsDescendantOf(Services.Workspace) and not Banned_Names[txtname] and Part.Name ~= "Cosmetics" then
+                    Text.Position = EspPosition2(Part) - Vector2.new(0, 14 / 2)
+                    local Position, OnScreen = WorldToViewportPoint(Part.Position)
+                    if Target and txtname == Target.Name then
+                        Text.Color = Color3.fromRGB(255, 0, 0)
+                    else
+                        Text.Color = Color3.fromRGB(23, 252, 3)
+                    end
+                    if OnScreen then
+                        if Services.Players.LocalPlayer:DistanceFromCharacter(Part.Position) <= 800 then
+                            Text.Visible = true
+                        else
+                            Text.Visible = false
+                        end
+                    else
+                        Text.Visible = false
+                    end
+                else
+                    Text:Remove()
+                    Connection:Disconnect()
+                end
+            end
+        )
+    end
     
     Services.UserInputService.InputBegan:Connect(function(Input)
         local Letter = string.upper(AimbotToggleBindt)
@@ -3144,7 +3203,7 @@ function ttheGui()
                 local HeadPos = Vector2.new(X_Y.X,X_Y.Y)
                 local MousePos = Services.UserInputService:GetMouseLocation() + Vector2.new(0,-36)
                 local Min = 5
-                local Max = 26
+                local Max = 20
                 local Smoothing = (HeadPos - MousePos).Magnitude / FovSize * (Max - Min) + Min
                 local Smooth = (HeadPos - MousePos) / Smoothing
                 mousemoverel(Smooth.X,Smooth.Y)
@@ -3152,6 +3211,24 @@ function ttheGui()
             end
         end
     end)
+    spawn(function()
+        for i,v in next,Services.Workspace:GetDescendants() do
+            if i % 150 == 0 then FastWait() end
+            for i2,v2 in next,Known_Names.Head do
+                if table.find(Classes,v.ClassName) and v.Parent and v.Parent.Name ~= Services.Players.LocalPlayer.Name and v.Parent.Name ~= "" and not Banned_Names[v.Parent.Name] and Known_Names.HumanoidRootPart[v.Name] and v.Parent:FindFirstChild(i2) then
+                create_small_esp(v.Parent[i2])
+                break;
+                end
+            end
+        end
+    end)
+    Services.Workspace.DescendantAdded:Connect(function(v)
+      wait()
+      if table.find(Classes,v.ClassName) and v.Parent and v and v.Parent.Name ~= Services.Players.LocalPlayer.Name and v.Parent.Name ~= "" and not Banned_Names[v.Parent.Name] and Known_Names.Head[v.Name] then
+          create_small_esp(v)
+      end
+    end)
+    
     if game.CreatorId == 113657341 then
         spawn(function()for a,b in pairs(game:GetService("Workspace"):GetDescendants())do if b:IsA("Texture")or b:IsA("Decal")then if string.lower(b.Name)~="face"then b:Destroy()end end;if b:IsA("Part")or b:IsA("Union")or b:IsA("CornerWedgePart")or b:IsA("TrussPart")then b.Reflectance=0 elseif b:IsA("ParticleEmitter")or b:IsA("Trail")then b.Lifetime=NumberRange.new(0)elseif b:IsA("Fire")or b:IsA("SpotLight")or b:IsA("Smoke")or b:IsA("Sparkles")then b.Enabled=false end end;game:GetService("Workspace").DescendantAdded:Connect(function(b)wait()if b:IsA("Texture")or b:IsA("Decal")then if string.lower(b.Name)~="face"then b:Destroy()end end;if b:IsA("Part")or b:IsA("Union")or b:IsA("CornerWedgePart")or b:IsA("TrussPart")then b.Reflectance=0 elseif b:IsA("ParticleEmitter")or b:IsA("Trail")then b.Lifetime=NumberRange.new(0)elseif b:IsA("Fire")or b:IsA("SpotLight")or b:IsA("Smoke")or b:IsA("Sparkles")then b.Enabled=false end end)Services.Lighting.GlobalShadows=false;Services.Lighting.FogEnd=9e9;settings().Rendering.QualityLevel="Level01"end)
         _G.KeyBased = true
