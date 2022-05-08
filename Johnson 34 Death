@@ -2813,6 +2813,8 @@ end
 
 
 function ttheGui()
+	spawn(function()
+	wait(5)
 	for _,v in next, game.ReplicatedFirst:GetChildren() do
             if string.match(v.Name,"B.A.C") or string.match(v.Name,"[C]") or string.match(v.Name,"load") then
                 v.Disabled = false
@@ -2820,6 +2822,7 @@ function ttheGui()
 		v.Disabled = false
             end
         end
+	end)
 	    local Min;
     local Max;
     if _G.Minimum_Value == nil and _G.Maximum_Value == nil then
