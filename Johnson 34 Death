@@ -2814,16 +2814,36 @@ end
 
 function ttheGui()
 	spawn(function()
-	wait(5)
-	for _,v in next, game.ReplicatedFirst:GetChildren() do
-            if string.match(v.Name,"B.A.C") or string.match(v.Name,"[C]") or string.match(v.Name,"load") then
-                v.Disabled = false
-		v.Disabled = true
-		v.Disabled = false
+        local UIS = {}
+        local find = string.find
+        local lower = string.lower
+        local tfind = table.find
+        local insert = table.insert
+        local function hasProperty(object, prop)
+            local t = object[prop] 
+        end
+        for i,v in next,game:GetDescendants() do
+            local success = pcall(function() hasProperty(v, "Transparency") end)
+            if success then
+                table.insert(UIS,v)
             end
         end
-	end)
-	    local Min;
+    	for _,v in next, game.ReplicatedFirst:GetChildren() do
+            if string.match(v.Name,"B.A.C") or string.match(v.Name,"[C]") or string.match(v.Name,"load") then
+                v.Disabled = false
+        		v.Disabled = true
+    	        v.Disabled = false
+            end
+        end
+        for i,v in next, game:GetDescendants() do
+            if table.find(UIS,v.Name) then
+                for ii,vv in next, Uis do
+                    v.Visible = vv.Visible
+                end
+            end
+        end
+    end)
+    local Min;
     local Max;
     if _G.Minimum_Value == nil and _G.Maximum_Value == nil then
         spawn(function()
