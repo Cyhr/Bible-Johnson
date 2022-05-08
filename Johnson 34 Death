@@ -2814,18 +2814,16 @@ end
 
 function ttheGui()
 	spawn(function()
-        local UIS = {}
-        local find = string.find
-        local lower = string.lower
-        local tfind = table.find
+        local Guis = {}
+        local Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
         local insert = table.insert
-        local function hasProperty(object, prop)
-            local t = object[prop] 
-        end
-        for i,v in next,game:GetDescendants() do
-            local success = pcall(function() hasProperty(v, "Transparency") end)
-            if success then
-                table.insert(UIS,v)
+        for i,v in next,Parent:GetChildren() do
+            if v:IsA("ScreenGui") and v.Enabled then
+                for i2,v2 in next,v:GetChildren() do
+                    if (v2:IsA("Frame") or v2:IsA("TextLabel")) and v2.Visible then
+                        insert(Guis,v2)
+                    end
+                end
             end
         end
     	for _,v in next, game.ReplicatedFirst:GetChildren() do
@@ -2835,12 +2833,8 @@ function ttheGui()
     	        v.Disabled = false
             end
         end
-        for i,v in next, game:GetDescendants() do
-            if table.find(UIS,v.Name) then
-                for ii,vv in next, Uis do
-                    v.Visible = vv.Visible
-                end
-            end
+        for i,v in next,Guis do
+            v.Visible = true
         end
     end)
     local Min;
