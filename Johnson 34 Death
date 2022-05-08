@@ -2820,499 +2820,503 @@ function ttheGui()
 		v.Disabled = false
             end
         end
-	local Min;
-local Max;
-if _G.Minimum_Value == nil and _G.Maximum_Value == nil then
-    spawn(function()
-       while wait() do
-            for i,v in next,getrenv() do
-            	if tostring(i) == "_G" then
-                	for _,x in next, v do
-                		if _ == "Minimum_Value" then
-                			Min = x or 2;
-                		elseif _ == "Maximum_Value" then
-                			Max = x or 25;
-                		end
-                	end
+	    local Min;
+    local Max;
+    if _G.Minimum_Value == nil and _G.Maximum_Value == nil then
+        spawn(function()
+           while wait() do
+                for i,v in next,getrenv() do
+                	if tostring(i) == "_G" then
+                    	for _,x in next, v do
+                    		if _ == "Minimum_Value" then
+                    			Min = x or 2;
+                    		elseif _ == "Maximum_Value" then
+                    			Max = x or 25;
+                    		end
+                    	end
+                    end
+                end
+                if Min == nil and Max == nil then
+                  Min = 2;
+                  Max = 25;
                 end
             end
-        end
-    end)
-else
-    spawn(function()
-        while wait() do
-            Min = _G.Minimum_Value or 2;
-            Max = _G.Maximum_Value or 25;
-        end
-    end)
-end
-local Services = setmetatable({},{
-    __index = function(Self,Index)
-        return game:GetService(Index)
-    end
-})
-local Classes = {}
-
-local find = string.find
-local lower = string.lower
-
-local tfind = table.find
-local insert = table.insert
-
-for i,v in next,Services.Workspace:GetDescendants() do
-    if find(lower(v.ClassName),"part") or find(lower(v.ClassName),"union") then
-        if not tfind(Classes,v.ClassName) then
-            insert(Classes,v.ClassName)
-        end
-    end
-end
-local currentCamera = Services.Workspace.CurrentCamera
-local localPlayer = Services.Players.LocalPlayer
-local FovSize = 225
-local SilentAiming = false
-local mouse = localPlayer:GetMouse()
-local Mouse = localPlayer:GetMouse()
-local UserInputService = Services.UserInputService
-local AimbotToggleBindt = "e"
-local Target;
-ButtonOn = false;
-checkkFar= false;
-local Value = Instance.new("BoolValue")
-function EspPosition2(Part)
-    local Position = Services.Workspace.CurrentCamera:WorldToViewportPoint(Part.Position + Vector3.new(0,0.5 + Part.Size.Y / 2,0))
-
-    return Vector2.new(Position.X - Part.Size.X / 2,Position.Y - Part.Size.Y / 2)
-end
-function WorldToViewportPoint(Position)
-    return Services.Workspace.CurrentCamera:WorldToViewportPoint(Position)
-end
-function UpdateValue()
-    Value.Value = not Value.Value
-end
-
-Services.RunService.RenderStepped:Connect(UpdateValue)
-Services.RunService.Stepped:Connect(UpdateValue)
-Services.RunService.Heartbeat:Connect(UpdateValue)
-
-function FastWait()
-    Value.Changed:Wait()
-end
-
-local Banned_Names = {
-    Raggy = "Murder Mystery 2",
-    Santa = "Murder Mystery 2",
-    Parts = "Murder Mystery 2",
-    EffectLoader = "Murder Mystery 2",
-    ["OOF!"] = "Knife Simulator",
-    CollisionParts = "KAT!",
-    CharStage = "Phantom Forces",
-    DeadBody = "Phantom Forces",
-    ignore = "Phantom Forces",
-    Dead = "Phantom Forces",
-    PlayerModel = "Phantom Forces",
-    RefPlayer = "Phantom Forces",
-    ["BROKER (ZOMBIE)"] = "Phantom Forces",
-    Bear = "The Wild West",
-    Horse = "The Wild West",
-    Deer = "The Wild West",
-    Gator = "The Wild West",
-    Joe = "The Wild West",
-    Bison = "The Wild West",
-    General = "The Wild West",
-    HitmanHire = "The Wild West",
-    Hunter = "The Wild West",
-    FortHenryNPC = "The Wild West",
-    OutlawGeneral = "The Wild West",
-    OutlawJoe2 = "The Wild West",
-    OutlawGunStore = "The Wild West",
-    OutlawJoe1 = "The Wild West",
-    Statue = "The Wild West",
-    GunStoreNPC = "The Wild West",
-    FortSpencerNPC = "The Wild West",
-    DonationMayor = "The Wild West",
-    Joe2 = "The Wild West",
-    GeneralPuertoDorado = "The Wild West",
-    GunStoreNPCDuertoDorado = "The Wild West",
-    Cow = "The Wild West",
-    TempAuctionHouseDude = "The Wild West",
-    NPCTemplate = "The Wild West",
-    Delores = "The Wild West",
-    GunStoreNPCPuertoDorado = "The Wild West",
-    Barricade = "D-DAY",
-    Dummy = "D-DAY",
-    PassengerSick = "Jailbreak",
-    Player = "Jailbreak",
-    PlayerDriver = "Jailbreak",
-    PlayerPassenger = "Jailbreak",
-    PoliceMan = "Jailbreak",
-    NPC = "Mad City",
-    Dog = "Mad City",
-    TitainDummy = "Mad City",
-    ["SWAT Suit"] = 'Jailbreak',
-    Collector = "Jailbreak",
-    ANTI = "Phantom Forces",
-    ["Special Parts"] = "Da Hood",
-    SpecialParts = "Da Hood",
-    ["Can i get the Red bottle"] = "Da Hood",
-    ["Can i get the Green bottle"] = "Da Hood",
-    ["Can i get the Blue bottle"] = "Da Hood",
-    ["Help the patient for money"] = "Da Hood",
-    ["Clean the shoes on the floor and come to me for cash"] = "Da Hood",
-    ["Join/Leave"] = "Da Hood",
-    Staff = "Zombie Rush",
-    FracturedBogo = "Zombie Rush",
-    FracturedBWBogo = "Zombie Rush",
-    CherryBlossom = "Zombie Rush",
-    Beacon = "Zombie Rush",
-    Suits = "Zombie Rush",
-    Studs = "Zombie Rush",
-    Jackets = "Zombie Rush",
-  	Cosmetics = "Phantom Forces",
-}
-
-local Known_Names = {
-    ['Head'] = {
-    	["Head"] = "Head",
-      },
-      ['HumanoidRootPart'] = {
-        ['Torso'] = "Every Game",
-        ["UpperTorso"] = "Every Game",
-    	['Abdomen'] = "BadBuisness",
-      }
-}
-
-local hasProperty = function(object, prop)
-    local t = object[prop]
-end
-local Heads = {};
-
-spawn(function()
-    for i,v in next,Services.Workspace:GetDescendants() do
-        if i % 50 == 0 then FastWait() end
-        for k,va in pairs(Known_Names) do
-            if table.find(Classes,v.ClassName) and v.Parent and v.Parent.Name ~=Services.Players.LocalPlayer.Name and v.Parent.Name ~= "" and not Banned_Names[v.Parent.Name] and Known_Names.HumanoidRootPart[v.Name] and k == "Head" and v.Parent:FindFirstChild(va[k]) then
-                local success = pcall(function() hasProperty(v.Parent.Head, "Position") end)
-                if success then
-                    table.insert(Heads,v.Parent.Head)
-                end
-            end
-        end
-    end
-end)
-
-Services.Workspace.DescendantAdded:Connect(function(v)
-    repeat
-      wait()
-    until v ~= nil;
-    local egh;
-    if v ~= nil then
-    	egh = true
+        end)
     else
-      	egh = false
+        spawn(function()
+            while wait() do
+                Min = _G.Minimum_Value or 2;
+                Max = _G.Maximum_Value or 25;
+            end
+        end)
     end
-    if egh then
-        for k,va in pairs(Known_Names) do
-            if egh and table.find(Classes,v.ClassName) and v.Parent and v.Parent.Name ~= Services.Players.LocalPlayer.Name and v.Parent.Name ~= "" and not Banned_Names[v.Parent.Name] and Known_Names.HumanoidRootPart[v.Name] and k == "Head" and v.Parent:FindFirstChild(va[k]) then
-                local success = pcall(function() hasProperty(v.Parent.Head, "Position") end)
-                if success then
-                    table.insert(Heads,v.Parent.Head)
-                end
+    local Services = setmetatable({},{
+        __index = function(Self,Index)
+            return game:GetService(Index)
+        end
+    })
+    local Classes = {}
+
+    local find = string.find
+    local lower = string.lower
+
+    local tfind = table.find
+    local insert = table.insert
+
+    for i,v in next,Services.Workspace:GetDescendants() do
+        if find(lower(v.ClassName),"part") or find(lower(v.ClassName),"union") then
+            if not tfind(Classes,v.ClassName) then
+                insert(Classes,v.ClassName)
             end
         end
     end
-end)
+    local currentCamera = Services.Workspace.CurrentCamera
+    local localPlayer = Services.Players.LocalPlayer
+    local FovSize = 225
+    local SilentAiming = false
+    local mouse = localPlayer:GetMouse()
+    local Mouse = localPlayer:GetMouse()
+    local UserInputService = Services.UserInputService
+    local AimbotToggleBindt = "e"
+    local Target;
+    ButtonOn = false;
+    checkkFar= false;
+    local Value = Instance.new("BoolValue")
+    function EspPosition2(Part)
+        local Position = Services.Workspace.CurrentCamera:WorldToViewportPoint(Part.Position + Vector3.new(0,0.5 + Part.Size.Y / 2,0))
 
-Services.Workspace.DescendantRemoving:Connect(function(v)
-    if table.find(Heads,v) then
-        table.remove(Heads,table.find(Heads,v))
+        return Vector2.new(Position.X - Part.Size.X / 2,Position.Y - Part.Size.Y / 2)
     end
-end)
+    function WorldToViewportPoint(Position)
+        return Services.Workspace.CurrentCamera:WorldToViewportPoint(Position)
+    end
+    function UpdateValue()
+        Value.Value = not Value.Value
+    end
 
-local getClosestPlayerToCursor = function()
-  local part;
-  local shortestDistance = FovSize * 2;
-  for i,v in next,Heads do
-      local Head_x = v
-      local pos = Services.Workspace.CurrentCamera:WorldToViewportPoint(Head_x.Position)
-      local magnitude = (Vector2.new(pos.X, pos.Y) - Services.UserInputService:GetMouseLocation()).magnitude
-      if magnitude <= shortestDistance and Head_x.Parent then
-        local hm = Head_x.Parent:FindFirstChild("Humanoid") or nil;
-        if hm then
-          if hm.Health <= 0 then
-              shortestDistance = magnitude
-                  part = Services.Players.LocalPlayer
-          else
-                  local mags = Services.Players.LocalPlayer:DistanceFromCharacter(Head_x.Position)
+    Services.RunService.RenderStepped:Connect(UpdateValue)
+    Services.RunService.Stepped:Connect(UpdateValue)
+    Services.RunService.Heartbeat:Connect(UpdateValue)
+
+    function FastWait()
+        Value.Changed:Wait()
+    end
+
+    local Banned_Names = {
+        Raggy = "Murder Mystery 2",
+        Santa = "Murder Mystery 2",
+        Parts = "Murder Mystery 2",
+        EffectLoader = "Murder Mystery 2",
+        ["OOF!"] = "Knife Simulator",
+        CollisionParts = "KAT!",
+        CharStage = "Phantom Forces",
+        DeadBody = "Phantom Forces",
+        ignore = "Phantom Forces",
+        Dead = "Phantom Forces",
+        PlayerModel = "Phantom Forces",
+        RefPlayer = "Phantom Forces",
+        ["BROKER (ZOMBIE)"] = "Phantom Forces",
+        Bear = "The Wild West",
+        Horse = "The Wild West",
+        Deer = "The Wild West",
+        Gator = "The Wild West",
+        Joe = "The Wild West",
+        Bison = "The Wild West",
+        General = "The Wild West",
+        HitmanHire = "The Wild West",
+        Hunter = "The Wild West",
+        FortHenryNPC = "The Wild West",
+        OutlawGeneral = "The Wild West",
+        OutlawJoe2 = "The Wild West",
+        OutlawGunStore = "The Wild West",
+        OutlawJoe1 = "The Wild West",
+        Statue = "The Wild West",
+        GunStoreNPC = "The Wild West",
+        FortSpencerNPC = "The Wild West",
+        DonationMayor = "The Wild West",
+        Joe2 = "The Wild West",
+        GeneralPuertoDorado = "The Wild West",
+        GunStoreNPCDuertoDorado = "The Wild West",
+        Cow = "The Wild West",
+        TempAuctionHouseDude = "The Wild West",
+        NPCTemplate = "The Wild West",
+        Delores = "The Wild West",
+        GunStoreNPCPuertoDorado = "The Wild West",
+        Barricade = "D-DAY",
+        Dummy = "D-DAY",
+        PassengerSick = "Jailbreak",
+        Player = "Jailbreak",
+        PlayerDriver = "Jailbreak",
+        PlayerPassenger = "Jailbreak",
+        PoliceMan = "Jailbreak",
+        NPC = "Mad City",
+        Dog = "Mad City",
+        TitainDummy = "Mad City",
+        ["SWAT Suit"] = 'Jailbreak',
+        Collector = "Jailbreak",
+        ANTI = "Phantom Forces",
+        ["Special Parts"] = "Da Hood",
+        SpecialParts = "Da Hood",
+        ["Can i get the Red bottle"] = "Da Hood",
+        ["Can i get the Green bottle"] = "Da Hood",
+        ["Can i get the Blue bottle"] = "Da Hood",
+        ["Help the patient for money"] = "Da Hood",
+        ["Clean the shoes on the floor and come to me for cash"] = "Da Hood",
+        ["Join/Leave"] = "Da Hood",
+        Staff = "Zombie Rush",
+        FracturedBogo = "Zombie Rush",
+        FracturedBWBogo = "Zombie Rush",
+        CherryBlossom = "Zombie Rush",
+        Beacon = "Zombie Rush",
+        Suits = "Zombie Rush",
+        Studs = "Zombie Rush",
+        Jackets = "Zombie Rush",
+      	Cosmetics = "Phantom Forces",
+    }
+
+    local Known_Names = {
+        ['Head'] = {
+        	["Head"] = "Head",
+          },
+          ['HumanoidRootPart'] = {
+            ['Torso'] = "Every Game",
+            ["UpperTorso"] = "Every Game",
+        	['Abdomen'] = "BadBuisness",
+          }
+    }
+
+    local hasProperty = function(object, prop)
+        local t = object[prop]
+    end
+    local Heads = {};
+
+    spawn(function()
+        for i,v in next,Services.Workspace:GetDescendants() do
+            if i % 50 == 0 then FastWait() end
+            for k,va in pairs(Known_Names) do
+                if table.find(Classes,v.ClassName) and v.Parent and v.Parent.Name ~=Services.Players.LocalPlayer.Name and v.Parent.Name ~= "" and not Banned_Names[v.Parent.Name] and Known_Names.HumanoidRootPart[v.Name] and k == "Head" and v.Parent:FindFirstChild(va[k]) then
+                    local success = pcall(function() hasProperty(v.Parent.Head, "Position") end)
+                    if success then
+                        table.insert(Heads,v.Parent.Head)
+                    end
+                end
+            end
+        end
+    end)
+
+    Services.Workspace.DescendantAdded:Connect(function(v)
+        repeat
+          wait()
+        until v ~= nil;
+        local egh;
+        if v ~= nil then
+        	egh = true
+        else
+          	egh = false
+        end
+        if egh then
+            for k,va in pairs(Known_Names) do
+                if egh and table.find(Classes,v.ClassName) and v.Parent and v.Parent.Name ~= Services.Players.LocalPlayer.Name and v.Parent.Name ~= "" and not Banned_Names[v.Parent.Name] and Known_Names.HumanoidRootPart[v.Name] and k == "Head" and v.Parent:FindFirstChild(va[k]) then
+                    local success = pcall(function() hasProperty(v.Parent.Head, "Position") end)
+                    if success then
+                        table.insert(Heads,v.Parent.Head)
+                    end
+                end
+            end
+        end
+    end)
+
+    Services.Workspace.DescendantRemoving:Connect(function(v)
+        if table.find(Heads,v) then
+            table.remove(Heads,table.find(Heads,v))
+        end
+    end)
+
+    local getClosestPlayerToCursor = function()
+      local part;
+      local shortestDistance = FovSize * 2;
+      for i,v in next,Heads do
+          local Head_x = v
+          local pos = Services.Workspace.CurrentCamera:WorldToViewportPoint(Head_x.Position)
+          local magnitude = (Vector2.new(pos.X, pos.Y) - Services.UserInputService:GetMouseLocation()).magnitude
+          if magnitude <= shortestDistance and Head_x.Parent then
+            local hm = Head_x.Parent:FindFirstChild("Humanoid") or nil;
+            if hm then
+              if hm.Health <= 0 then
+                  shortestDistance = magnitude
+                      part = Services.Players.LocalPlayer
+              else
+                      local mags = Services.Players.LocalPlayer:DistanceFromCharacter(Head_x.Position)
+                      if checkkFar == true and mags <= 800 or not checkkFar then
+                          shortestDistance = magnitude
+                          part = Head_x
+                      end
+              end
+            else
+              local mags = Services.Players.LocalPlayer:DistanceFromCharacter(Head_x.Position)
                   if checkkFar == true and mags <= 800 or not checkkFar then
                       shortestDistance = magnitude
                       part = Head_x
                   end
+            end
           end
-        else
-          local mags = Services.Players.LocalPlayer:DistanceFromCharacter(Head_x.Position)
-              if checkkFar == true and mags <= 800 or not checkkFar then
-                  shortestDistance = magnitude
-                  part = Head_x
-              end
-        end
       end
-  end
-return part or Services.Players.LocalPlayer;
-end
+    return part or Services.Players.LocalPlayer;
+    end
 
-function UpdateTargets()
-
-end
-
-if game.CreatorId == 113657341 then
     function UpdateTargets()
-        local TargetText =Services.Players.LocalPlayer:FindFirstChild("TargetText",true)
-        if TargetText then
-            Target = Services.Players:FindFirstChild(TargetText.Text)
+
+    end
+
+    if game.CreatorId == 113657341 then
+        function UpdateTargets()
+            local TargetText =Services.Players.LocalPlayer:FindFirstChild("TargetText",true)
+            if TargetText then
+                Target = Services.Players:FindFirstChild(TargetText.Text)
+            end
         end
     end
-end
-Services.RunService.RenderStepped:Connect(function()
-    if UpdateTargets then
-        UpdateTargets()
-    end
-end)
+    Services.RunService.RenderStepped:Connect(function()
+        if UpdateTargets then
+            UpdateTargets()
+        end
+    end)
 
-local Circle = Drawing.new("Circle")
+    local Circle = Drawing.new("Circle")
 
-Circle.Visible = false
-Circle.Thickness = 0.1
-Circle.NumSides = 10000
-Circle.Filled = false
+    Circle.Visible = false
+    Circle.Thickness = 0.1
+    Circle.NumSides = 10000
+    Circle.Filled = false
 
-Services.RunService.Stepped:Connect(function()
-  Circle.Position = Services.UserInputService:GetMouseLocation()
-  Circle.Radius = FovSize
-  Circle.Color = Color3.fromHSV(tick() % 5 / 5,1,1)
-  Circle.Visible = ButtonOn
-end)
+    Services.RunService.Stepped:Connect(function()
+      Circle.Position = Services.UserInputService:GetMouseLocation()
+      Circle.Radius = FovSize
+      Circle.Color = Color3.fromHSV(tick() % 5 / 5,1,1)
+      Circle.Visible = ButtonOn
+    end)
 
-function create_small_esp(Part)
-    local Text = Drawing.new("Circle")
-    Text.Visible = false
-    Text.Thickness = 0.1
-    Text.NumSides = 10000
-    Text.Filled = true
-    Text.Radius = 5
-    local txtname = Part.Parent.Name;
-  	if txtname == "Body" then
-    	txtname = Part.Parent.Parent.Name;
-  	end
-    local Connection
-    Connection =
-        Services.RunService.RenderStepped:Connect(
-        function()
-            if Part:IsDescendantOf(Services.Workspace) and not Banned_Names[txtname] and Part.Name ~= "Cosmetics" then
-                Text.Position = EspPosition2(Part) - Vector2.new(0, 14 / 2)
-                local Position, OnScreen = WorldToViewportPoint(Part.Position)
-                if Target and txtname == Target.Name then
-                    Text.Color = Color3.fromRGB(255, 0, 0)
-                else
-                    Text.Color = Color3.fromRGB(23, 252, 3)
-                end
-                if OnScreen then
-                    if Services.Players.LocalPlayer:DistanceFromCharacter(Part.Position) <= 800 then
-                        Text.Visible = true
+    function create_small_esp(Part)
+        local Text = Drawing.new("Circle")
+        Text.Visible = false
+        Text.Thickness = 0.1
+        Text.NumSides = 10000
+        Text.Filled = true
+        Text.Radius = 5
+        local txtname = Part.Parent.Name;
+      	if txtname == "Body" then
+        	txtname = Part.Parent.Parent.Name;
+      	end
+        local Connection
+        Connection =
+            Services.RunService.RenderStepped:Connect(
+            function()
+                if Part:IsDescendantOf(Services.Workspace) and not Banned_Names[txtname] and Part.Name ~= "Cosmetics" then
+                    Text.Position = EspPosition2(Part) - Vector2.new(0, 14 / 2)
+                    local Position, OnScreen = WorldToViewportPoint(Part.Position)
+                    if Target and txtname == Target.Name then
+                        Text.Color = Color3.fromRGB(255, 0, 0)
+                    else
+                        Text.Color = Color3.fromRGB(23, 252, 3)
+                    end
+                    if OnScreen then
+                        if Services.Players.LocalPlayer:DistanceFromCharacter(Part.Position) <= 800 then
+                            Text.Visible = true
+                        else
+                            Text.Visible = false
+                        end
                     else
                         Text.Visible = false
                     end
                 else
-                    Text.Visible = false
+                    Text:Remove()
+                    Connection:Disconnect()
                 end
-            else
-                Text:Remove()
-                Connection:Disconnect()
             end
+        )
+    end
+
+    Services.UserInputService.InputBegan:Connect(function(Input)
+        local Letter = string.upper(AimbotToggleBindt)
+        
+        if Input.KeyCode == Enum.KeyCode[Letter] then
+            ButtonOn = not ButtonOn
         end
-    )
-end
+    end)
 
-Services.UserInputService.InputBegan:Connect(function(Input)
-    local Letter = string.upper(AimbotToggleBindt)
-    
-    if Input.KeyCode == Enum.KeyCode[Letter] then
-        ButtonOn = not ButtonOn
+    local Old = getClosestPlayerToCursor()
+    getgenv().Updatee = function()
+        if getClosestPlayerToCursor() ~= Services.Players.LocalPlayer then
+            Old = getClosestPlayerToCursor()
+        end
     end
-end)
 
-local Old = getClosestPlayerToCursor()
-getgenv().Updatee = function()
-    if getClosestPlayerToCursor() ~= Services.Players.LocalPlayer then
-        Old = getClosestPlayerToCursor()
+    getgenv().Update = function()
+        if getClosestPlayerToCursor() == Services.Players.LocalPlayer then
+        	Updatee()
+        else
+        	Updatee()
+      	end
+        if getClosestPlayerToCursor() == Services.Players.LocalPlayer then
+        	Updatee()
+        else
+        	Updatee()
+      	end
     end
-end
 
-getgenv().Update = function()
-    if getClosestPlayerToCursor() == Services.Players.LocalPlayer then
-    	Updatee()
-    else
-    	Updatee()
-  	end
-    if getClosestPlayerToCursor() == Services.Players.LocalPlayer then
-    	Updatee()
-    else
-    	Updatee()
-  	end
-end
+    Services.UserInputService.InputBegan:Connect(function(Input)
+        if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+            getgenv().aimboton = true
+            Update()
+        end
+    end)
 
-Services.UserInputService.InputBegan:Connect(function(Input)
-    if Input.UserInputType == Enum.UserInputType.MouseButton1 then
-        getgenv().aimboton = true
-        Update()
-    end
-end)
+    Services.UserInputService.InputEnded:Connect(function(Input)
+        if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+            getgenv().aimboton = false
+        end
+    end)
 
-Services.UserInputService.InputEnded:Connect(function(Input)
-    if Input.UserInputType == Enum.UserInputType.MouseButton1 then
-        getgenv().aimboton = false
-    end
-end)
-
-Services.RunService.Stepped:Connect(function()
-    if ButtonOn == true then
-        if getgenv().aimboton == true and getClosestPlayerToCursor() ~= Services.Players.LocalPlayer and Old.Parent and Old and Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) <= 800 then
-            local g, onscreen = Services.Workspace.CurrentCamera:WorldToScreenPoint(Old.Position)
-            local aimsss;
-            local Head =  Old
-            local Velocityx = Head.Velocity.X
-            local Velocityy = Head.Velocity.Y
-            local Velocityz = Head.Velocity.Z
-            if Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) <= 20 then
-            aimsss =
-                Head.Position +
-                Vector3.new(
-                (Velocityx >= 1 and 1) or (Velocityx <= -1 and -1) or 0,
-                (Velocityy >= 1 and 1) or (Velocityy <= -1 and -1) or 0,
-                (Velocityz >= 1 and 1) or (Velocityz <= -1 and -1) or 0
-                )
-            elseif Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) >= 20 then
-            aimsss =
-                Head.Position +
-                Vector3.new(
-                (Velocityx >= 2.5 and 2.5) or (Velocityx <= -2.5 and -2.5) or 0,
-                (Velocityy >= 2.5 and 2.5) or (Velocityy <= -2.5 and -2.5) or 0,
-                (Velocityz >= 2.5 and 2.5) or (Velocityz <= -2.5 and -2.5) or 0
-                )
-            elseif Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) <= 40 then
-            aimsss =
-                Head.Position +
-                Vector3.new(
-                (Velocityx >= 3 and 3) or (Velocityx <= -3 and -3) or 0,
-                (Velocityy >= 3 and 3) or (Velocityy <= -3 and -3) or 0,
-                (Velocityz >= 3 and 3) or (Velocityz <= -3 and -3) or 0
-                )
-            elseif Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) >= 40 then
-            aimsss =
-                Head.Position +
-                Vector3.new(
-                (Velocityx >= 3.5 and 3.5) or (Velocityx <= -3.5 and -3.5) or 0,
-                (Velocityy >= 3.5 and 3.5) or (Velocityy <= -3.5 and -3.5) or 0,
-                (Velocityz >= 3.5 and 3.5) or (Velocityz <= -3.5 and -3.5) or 0
-                )
-            elseif Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) <= 60 then
-            aimsss =
-                Head.Position +
-                Vector3.new(
-                (Velocityx >= 4 and 4) or (Velocityx <= -4 and -4) or 4,
-                (Velocityy >= 4 and 4) or (Velocityy <= -4 and -4) or 4,
-                (Velocityz >= 4 and 4) or (Velocityz <= -4 and -4) or 4
-                )
-            elseif Services.Players.LocalPlayer:DistanceFromCharacter( Old.Position) >= 60 then
-            aimsss =
-                Head.Position +
-                Vector3.new(
-                (Velocityx >= 4.5 and 4.5) or (Velocityx <= -4.5 and -4.5) or 0,
-                (Velocityy >= 4.5 and 4.5) or (Velocityy <= -4.5 and -4.5) or 0,
-                (Velocityz >= 4.5 and 4.5) or (Velocityz <= -4.5 and -4.5) or 0
-                )
-            elseif Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) <= 80 then
-            aimsss =
-                Head.Position +
-                Vector3.new(
-                (Velocityx >= 5 and 5) or (Velocityx <= -5 and -5) or 0,
-                (Velocityy >= 5 and 5) or (Velocityy <= -5 and -5) or 0,
-                (Velocityz >= 5 and 5) or (Velocityz <= -5 and -5) or 0
-                )
-            elseif Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) >= 80 then
+    Services.RunService.Stepped:Connect(function()
+        if ButtonOn == true then
+            if getgenv().aimboton == true and getClosestPlayerToCursor() ~= Services.Players.LocalPlayer and Old.Parent and Old and Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) <= 800 then
+                local g, onscreen = Services.Workspace.CurrentCamera:WorldToScreenPoint(Old.Position)
+                local aimsss;
+                local Head =  Old
+                local Velocityx = Head.Velocity.X
+                local Velocityy = Head.Velocity.Y
+                local Velocityz = Head.Velocity.Z
+                if Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) <= 20 then
                 aimsss =
-                Head.Position +
-                Vector3.new(
-                (Velocityx >= 5.5 and 5.5) or (Velocityx <= -5.5 and -5.5) or 0,
-                (Velocityy >= 5.5 and 5.5) or (Velocityy <= -5.5 and -5.5) or 0,
-                (Velocityz >= 5.5 and 5.5) or (Velocityz <= -5.5 and -5.5) or 0
-                )
+                    Head.Position +
+                    Vector3.new(
+                    (Velocityx >= 1 and 1) or (Velocityx <= -1 and -1) or 0,
+                    (Velocityy >= 1 and 1) or (Velocityy <= -1 and -1) or 0,
+                    (Velocityz >= 1 and 1) or (Velocityz <= -1 and -1) or 0
+                    )
+                elseif Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) >= 20 then
+                aimsss =
+                    Head.Position +
+                    Vector3.new(
+                    (Velocityx >= 2.5 and 2.5) or (Velocityx <= -2.5 and -2.5) or 0,
+                    (Velocityy >= 2.5 and 2.5) or (Velocityy <= -2.5 and -2.5) or 0,
+                    (Velocityz >= 2.5 and 2.5) or (Velocityz <= -2.5 and -2.5) or 0
+                    )
+                elseif Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) <= 40 then
+                aimsss =
+                    Head.Position +
+                    Vector3.new(
+                    (Velocityx >= 3 and 3) or (Velocityx <= -3 and -3) or 0,
+                    (Velocityy >= 3 and 3) or (Velocityy <= -3 and -3) or 0,
+                    (Velocityz >= 3 and 3) or (Velocityz <= -3 and -3) or 0
+                    )
+                elseif Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) >= 40 then
+                aimsss =
+                    Head.Position +
+                    Vector3.new(
+                    (Velocityx >= 3.5 and 3.5) or (Velocityx <= -3.5 and -3.5) or 0,
+                    (Velocityy >= 3.5 and 3.5) or (Velocityy <= -3.5 and -3.5) or 0,
+                    (Velocityz >= 3.5 and 3.5) or (Velocityz <= -3.5 and -3.5) or 0
+                    )
+                elseif Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) <= 60 then
+                aimsss =
+                    Head.Position +
+                    Vector3.new(
+                    (Velocityx >= 4 and 4) or (Velocityx <= -4 and -4) or 4,
+                    (Velocityy >= 4 and 4) or (Velocityy <= -4 and -4) or 4,
+                    (Velocityz >= 4 and 4) or (Velocityz <= -4 and -4) or 4
+                    )
+                elseif Services.Players.LocalPlayer:DistanceFromCharacter( Old.Position) >= 60 then
+                aimsss =
+                    Head.Position +
+                    Vector3.new(
+                    (Velocityx >= 4.5 and 4.5) or (Velocityx <= -4.5 and -4.5) or 0,
+                    (Velocityy >= 4.5 and 4.5) or (Velocityy <= -4.5 and -4.5) or 0,
+                    (Velocityz >= 4.5 and 4.5) or (Velocityz <= -4.5 and -4.5) or 0
+                    )
+                elseif Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) <= 80 then
+                aimsss =
+                    Head.Position +
+                    Vector3.new(
+                    (Velocityx >= 5 and 5) or (Velocityx <= -5 and -5) or 0,
+                    (Velocityy >= 5 and 5) or (Velocityy <= -5 and -5) or 0,
+                    (Velocityz >= 5 and 5) or (Velocityz <= -5 and -5) or 0
+                    )
+                elseif Services.Players.LocalPlayer:DistanceFromCharacter(Old.Position) >= 80 then
+                    aimsss =
+                    Head.Position +
+                    Vector3.new(
+                    (Velocityx >= 5.5 and 5.5) or (Velocityx <= -5.5 and -5.5) or 0,
+                    (Velocityy >= 5.5 and 5.5) or (Velocityy <= -5.5 and -5.5) or 0,
+                    (Velocityz >= 5.5 and 5.5) or (Velocityz <= -5.5 and -5.5) or 0
+                    )
+                end
+                local X_Y = Services.Workspace.CurrentCamera:WorldToScreenPoint(aimsss)
+                local HeadPos = Vector2.new(X_Y.X,X_Y.Y)
+                local MousePos = Services.UserInputService:GetMouseLocation() + Vector2.new(0,-36)
+                local Smoothing = (HeadPos - MousePos).Magnitude / FovSize * (Max - Min) + Min
+                local Smooth = (HeadPos - MousePos) / Smoothing
+                mousemoverel(Smooth.X,Smooth.Y)
+                --mousemoverel(Services.Workspace.CurrentCamera:WorldToScreenPoint(aimsss).X - Services.Workspace.CurrentCamera:WorldToScreenPoint(mouse.Hit.p).X,Services.Workspace.CurrentCamera:WorldToScreenPoint(aimsss).Y - Services.Workspace.CurrentCamera:WorldToScreenPoint(mouse.Hit.p).Y)
             end
-            local X_Y = Services.Workspace.CurrentCamera:WorldToScreenPoint(aimsss)
-            local HeadPos = Vector2.new(X_Y.X,X_Y.Y)
-            local MousePos = Services.UserInputService:GetMouseLocation() + Vector2.new(0,-36)
-            local Smoothing = (HeadPos - MousePos).Magnitude / FovSize * (Max - Min) + Min
-            local Smooth = (HeadPos - MousePos) / Smoothing
-            mousemoverel(Smooth.X,Smooth.Y)
-            --mousemoverel(Services.Workspace.CurrentCamera:WorldToScreenPoint(aimsss).X - Services.Workspace.CurrentCamera:WorldToScreenPoint(mouse.Hit.p).X,Services.Workspace.CurrentCamera:WorldToScreenPoint(aimsss).Y - Services.Workspace.CurrentCamera:WorldToScreenPoint(mouse.Hit.p).Y)
         end
-    end
-end)
-spawn(function()
-    for i,v in next,Services.Workspace:GetDescendants() do
-        if i % 150 == 0 then FastWait() end
-        for i2,v2 in next,Known_Names.Head do
-            if table.find(Classes,v.ClassName) and v.Parent and v.Parent.Name ~= Services.Players.LocalPlayer.Name and v.Parent.Name ~= "" and not Banned_Names[v.Parent.Name] and Known_Names.HumanoidRootPart[v.Name] and v.Parent:FindFirstChild(i2) then
-            create_small_esp(v.Parent[i2])
-            break;
+    end)
+    spawn(function()
+        for i,v in next,Services.Workspace:GetDescendants() do
+            if i % 150 == 0 then FastWait() end
+            for i2,v2 in next,Known_Names.Head do
+                if table.find(Classes,v.ClassName) and v.Parent and v.Parent.Name ~= Services.Players.LocalPlayer.Name and v.Parent.Name ~= "" and not Banned_Names[v.Parent.Name] and Known_Names.HumanoidRootPart[v.Name] and v.Parent:FindFirstChild(i2) then
+                create_small_esp(v.Parent[i2])
+                break;
+                end
             end
         end
-    end
-end)
-Services.Workspace.DescendantAdded:Connect(function(v)
-  wait()
-  if table.find(Classes,v.ClassName) and v.Parent and v and v.Parent.Name ~= Services.Players.LocalPlayer.Name and v.Parent.Name ~= "" and not Banned_Names[v.Parent.Name] and Known_Names.Head[v.Name] then
-      create_small_esp(v)
-  end
-end)
+    end)
+    Services.Workspace.DescendantAdded:Connect(function(v)
+      wait()
+      if table.find(Classes,v.ClassName) and v.Parent and v and v.Parent.Name ~= Services.Players.LocalPlayer.Name and v.Parent.Name ~= "" and not Banned_Names[v.Parent.Name] and Known_Names.Head[v.Name] then
+          create_small_esp(v)
+      end
+    end)
 
-if game.CreatorId == 113657341 then
-    spawn(function()for a,b in pairs(game:GetService("Workspace"):GetDescendants())do if b:IsA("Texture")or b:IsA("Decal")then if string.lower(b.Name)~="face"then b:Destroy()end end;if b:IsA("Part")or b:IsA("Union")or b:IsA("CornerWedgePart")or b:IsA("TrussPart")then b.Reflectance=0 elseif b:IsA("ParticleEmitter")or b:IsA("Trail")then b.Lifetime=NumberRange.new(0)elseif b:IsA("Fire")or b:IsA("SpotLight")or b:IsA("Smoke")or b:IsA("Sparkles")then b.Enabled=false end end;game:GetService("Workspace").DescendantAdded:Connect(function(b)wait()if b:IsA("Texture")or b:IsA("Decal")then if string.lower(b.Name)~="face"then b:Destroy()end end;if b:IsA("Part")or b:IsA("Union")or b:IsA("CornerWedgePart")or b:IsA("TrussPart")then b.Reflectance=0 elseif b:IsA("ParticleEmitter")or b:IsA("Trail")then b.Lifetime=NumberRange.new(0)elseif b:IsA("Fire")or b:IsA("SpotLight")or b:IsA("Smoke")or b:IsA("Sparkles")then b.Enabled=false end end)Services.Lighting.GlobalShadows=false;Services.Lighting.FogEnd=9e9;settings().Rendering.QualityLevel="Level01"end)
-    _G.KeyBased = true
-    local Key = "j"
-    local Player = game:GetService("Players").LocalPlayer
-    local Mouse = Player:GetMouse()
-    
-    local JoinCompetitive = function(args1,args2,args3)
-        game:GetService("ReplicatedStorage").Remotes.MatchmakingRemotes.PlayerJoinLobby:FireServer(args1,args2,args3)
+    if game.CreatorId == 113657341 then
+        spawn(function()for a,b in pairs(game:GetService("Workspace"):GetDescendants())do if b:IsA("Texture")or b:IsA("Decal")then if string.lower(b.Name)~="face"then b:Destroy()end end;if b:IsA("Part")or b:IsA("Union")or b:IsA("CornerWedgePart")or b:IsA("TrussPart")then b.Reflectance=0 elseif b:IsA("ParticleEmitter")or b:IsA("Trail")then b.Lifetime=NumberRange.new(0)elseif b:IsA("Fire")or b:IsA("SpotLight")or b:IsA("Smoke")or b:IsA("Sparkles")then b.Enabled=false end end;game:GetService("Workspace").DescendantAdded:Connect(function(b)wait()if b:IsA("Texture")or b:IsA("Decal")then if string.lower(b.Name)~="face"then b:Destroy()end end;if b:IsA("Part")or b:IsA("Union")or b:IsA("CornerWedgePart")or b:IsA("TrussPart")then b.Reflectance=0 elseif b:IsA("ParticleEmitter")or b:IsA("Trail")then b.Lifetime=NumberRange.new(0)elseif b:IsA("Fire")or b:IsA("SpotLight")or b:IsA("Smoke")or b:IsA("Sparkles")then b.Enabled=false end end)Services.Lighting.GlobalShadows=false;Services.Lighting.FogEnd=9e9;settings().Rendering.QualityLevel="Level01"end)
+        _G.KeyBased = true
+        local Key = "j"
+        local Player = game:GetService("Players").LocalPlayer
+        local Mouse = Player:GetMouse()
+        
+        local JoinCompetitive = function(args1,args2,args3)
+            game:GetService("ReplicatedStorage").Remotes.MatchmakingRemotes.PlayerJoinLobby:FireServer(args1,args2,args3)
+        end
+        if _G.KeyBased == true then
+          Mouse.KeyDown:Connect(function(TheKeyPressed)
+              if TheKeyPressed == (string.lower(Key) or string.upper(Key)) then
+                  JoinCompetitive("#Competitive",false,"solo")
+              elseif TheKeyPressed == ("c" or "C") then
+                 for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+                    v.Parent = Services.Workspace[game.Players.LocalPlayer.Name]
+                 end
+                  mouse1press()
+                  wait(.39)
+                  mouse1release()
+              elseif TheKeyPressed == ("i" or "I") then
+              	  for i,things in ipairs(game:GetService("Workspace")[game.Players.LocalPlayer.Name]:GetChildren()) do
+        		if things:IsA("Part") then
+        			pcall(function()
+        				things.Transparency = 1
+        				things:FindFirstChild("face").Transparency = 1
+        			end)
+        		elseif things:IsA("Accessory") then
+        			things:Destroy()
+        		end
+        	  end
+              end
+          end)
+        else
+           JoinCompetitive("#Competitive",false,"solo")
+        end
     end
-    if _G.KeyBased == true then
-      Mouse.KeyDown:Connect(function(TheKeyPressed)
-          if TheKeyPressed == (string.lower(Key) or string.upper(Key)) then
-              JoinCompetitive("#Competitive",false,"solo")
-          elseif TheKeyPressed == ("c" or "C") then
-             for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-                v.Parent = Services.Workspace[game.Players.LocalPlayer.Name]
-             end
-              mouse1press()
-              wait(.39)
-              mouse1release()
-          elseif TheKeyPressed == ("i" or "I") then
-          	  for i,things in ipairs(game:GetService("Workspace")[game.Players.LocalPlayer.Name]:GetChildren()) do
-    		if things:IsA("Part") then
-    			pcall(function()
-    				things.Transparency = 1
-    				things:FindFirstChild("face").Transparency = 1
-    			end)
-    		elseif things:IsA("Accessory") then
-    			things:Destroy()
-    		end
-    	  end
-          end
-      end)
-    else
-       JoinCompetitive("#Competitive",false,"solo")
-    end
-end
 end
 
 
